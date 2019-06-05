@@ -14,7 +14,7 @@ public class Frame extends JFrame implements ActionListener
 {
 	PacMan man = new PacMan();
 
-	private int counter = 1;
+	private int counter = 0;
 	private char currentImage = 'r';
 	
 	public Frame()
@@ -85,7 +85,14 @@ public class Frame extends JFrame implements ActionListener
 	{	
 		this.fixBounds();
 		man.update();
-		wompWomp();
+		counter++;
+		if(counter == 20)
+		{
+			closeMouth();
+			counter = 0;
+			System.out.print(counter);
+		}
+
 	}
 	
 	public void fixBounds()
@@ -103,7 +110,7 @@ public class Frame extends JFrame implements ActionListener
 		{
 			man.setLocation(man.getX(), 0);
 		}
-		if(man.getY() > this.getHeight() + man.getHeight())
+		if(man.getY() > this.getHeight() - man.getHeight())
 		{
 			man.setLocation(man.getX(), this.getHeight() - man.getHeight());
 		}
@@ -157,9 +164,11 @@ public class Frame extends JFrame implements ActionListener
 		man.add(imageLabel);
 	}
 	
-	public void wompWomp()
+	public void closeMouth()
 	{
-		if(counter % 5 == 0)
+		counter++;
+		System.out.print(counter);
+		if(counter % 60 < 30)
 		{
 			man.removeAll();
 			ImageIcon imageIcon = new ImageIcon("images/pacman closed.png");
@@ -169,7 +178,7 @@ public class Frame extends JFrame implements ActionListener
 			JLabel imageLabel = new JLabel(imageIcon);
 			imageLabel.setBounds(0, 0, man.getDiameter(), man.getDiameter());
 			add(imageLabel);
-			counter = 1;
+			counter = 0;
 		}
 		else
 		{
@@ -221,7 +230,6 @@ public class Frame extends JFrame implements ActionListener
 				add(imageLabel);
 			}
 		}
-		counter++;
 	}
 	
 	public static void main(String args[])
