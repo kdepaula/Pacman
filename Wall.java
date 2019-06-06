@@ -11,7 +11,6 @@ public class Wall extends JComponent
 	public Wall(int x, int y)
 	{
 		wall = new Rectangle(0,0,30,30);
-		
 		setLocation(x,y);
 		setSize(30,30);
 	}

@@ -12,7 +12,9 @@ public class Pellet extends JComponent
 	//constructor
 	public Pellet(int x, int y)
 	{
-		ball = new Ellipse2D.Double(0,0,5,5);
+		ball = new Ellipse2D.Double(12,12,6,6);
+		setLocation(x,y);
+		setSize(25,25);
 	}
 	
 	public void paintComponent(Graphics g)
