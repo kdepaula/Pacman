@@ -1,24 +1,15 @@
-	import java.awt.Image;
-
-import javax.swing.ImageIcon;
-import javax.swing.JComponent;
+	import java.awt.Graphics;
+	import java.awt.Graphics2D;
+	import java.awt.geom.Ellipse2D;
+	import java.awt.geom.Rectangle2D;
+	import javax.swing.JComponent;
 import javax.swing.JLabel;
 
-public class PacMan extends JComponent
+public class PacMan extends JLabel
 {
 		private int dx;
 		private int dy;
 		
-		public PacMan()
-		{
-			ImageIcon imageIcon = new ImageIcon("images/pacman open.png");
-			Image image = imageIcon.getImage(); 
-			Image newimg = image.getScaledInstance(40, 40,  java.awt.Image.SCALE_SMOOTH);
-			imageIcon = new ImageIcon(newimg);
-			JLabel imageLabel = new JLabel(imageIcon);
-			imageLabel.setBounds(0, 0, 40, 40);
-			add(imageLabel);
-		}
 		
 		public void update()
 		{
@@ -38,6 +29,27 @@ public class PacMan extends JComponent
 		public int getDx() 
 		{
 			return dx;
+		}
+		
+		public boolean canGoUp(int[][] map)
+		{
+			if(map[(getY()/20)-1][getX()/20] == 1) {return false;}
+			return true;
+		}
+		public boolean canGoDown(int[][] map)
+		{
+			if(map[(getY()/20)+1][getX()/20] == 1) {return false;}
+			return true;
+		}
+		public boolean canGoLeft(int[][] map)
+		{
+			if(map[(getY()/20)][(getX()/20)-1] == 1) {return false;}
+			return true;
+		}
+		public boolean canGoRight(int[][] map)
+		{
+			if(map[(getY()/20)-1][(getX()/20)+1] == 1) {return false;}
+			return true;
 		}
 		
 		public int getDy()
