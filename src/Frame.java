@@ -21,7 +21,7 @@ public class Frame extends JFrame implements ActionListener
 	{
 		this.setBounds(100, 100, 600, 600);
 		this.setLayout(null);
-		man.setBounds(0, 0, man.getDiameter(), man.getDiameter());
+		man.setBounds(5, 5, man.getDiameter() + 10, man.getDiameter() + 10);
 		this.add(man);
 		
 		this.addKeyListener(new KeyListener()
@@ -86,11 +86,16 @@ public class Frame extends JFrame implements ActionListener
 		this.fixBounds();
 		man.update();
 		counter++;
+		System.out.print(counter);
+		if(counter == 10)
+		{
+			setCurrentImage();
+		}
+		
 		if(counter == 20)
 		{
 			closeMouth();
 			counter = 0;
-			System.out.print(counter);
 		}
 
 	}
@@ -166,10 +171,6 @@ public class Frame extends JFrame implements ActionListener
 	
 	public void closeMouth()
 	{
-		counter++;
-		System.out.print(counter);
-		if(counter % 60 < 30)
-		{
 			man.removeAll();
 			ImageIcon imageIcon = new ImageIcon("images/pacman closed.png");
 			Image image = imageIcon.getImage(); 
@@ -177,12 +178,11 @@ public class Frame extends JFrame implements ActionListener
 			imageIcon = new ImageIcon(newimg);
 			JLabel imageLabel = new JLabel(imageIcon);
 			imageLabel.setBounds(0, 0, man.getDiameter(), man.getDiameter());
-			add(imageLabel);
-			counter = 0;
-		}
-		else
-		{
-			if(currentImage == 'r')
+			man.add(imageLabel);
+	}
+	public void setCurrentImage()
+	{
+		if(currentImage == 'r')
 			{
 				man.removeAll();
 				ImageIcon imageIcon = new ImageIcon("images/pacman open.png");
@@ -191,7 +191,7 @@ public class Frame extends JFrame implements ActionListener
 				imageIcon = new ImageIcon(newimg);
 				JLabel imageLabel = new JLabel(imageIcon);
 				imageLabel.setBounds(0, 0, man.getDiameter(), man.getDiameter());
-				add(imageLabel);
+				man.add(imageLabel);
 			}
 			
 			if(currentImage == 'l')
@@ -203,7 +203,7 @@ public class Frame extends JFrame implements ActionListener
 				imageIcon = new ImageIcon(newimg);
 				JLabel imageLabel = new JLabel(imageIcon);
 				imageLabel.setBounds(0, 0, man.getDiameter(), man.getDiameter());
-				add(imageLabel);
+				man.add(imageLabel);
 			}
 			
 			if(currentImage == 'u')
@@ -215,7 +215,7 @@ public class Frame extends JFrame implements ActionListener
 				imageIcon = new ImageIcon(newimg);
 				JLabel imageLabel = new JLabel(imageIcon);
 				imageLabel.setBounds(0, 0, man.getDiameter(), man.getDiameter());
-				add(imageLabel);
+				man.add(imageLabel);
 			}
 			
 			if(currentImage == 'd')
@@ -227,9 +227,8 @@ public class Frame extends JFrame implements ActionListener
 				imageIcon = new ImageIcon(newimg);
 				JLabel imageLabel = new JLabel(imageIcon);
 				imageLabel.setBounds(0, 0, man.getDiameter(), man.getDiameter());
-				add(imageLabel);
+				man.add(imageLabel);
 			}
-		}
 	}
 	
 	public static void main(String args[])

@@ -8,7 +8,7 @@ public class PacMan extends JComponent
 {
 		private int dx;
 		private int dy;
-		private int diameter = 40;
+		private int diameter = 20;
 		
 		public PacMan()
 		{
