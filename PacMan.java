@@ -1,15 +1,25 @@
-	import java.awt.Graphics;
-	import java.awt.Graphics2D;
-	import java.awt.geom.Ellipse2D;
-	import java.awt.geom.Rectangle2D;
-	import javax.swing.JComponent;
+	import java.awt.Image;
+
+import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 
-public class PacMan extends JLabel
+public class PacMan extends JComponent
 {
 		private int dx;
 		private int dy;
+		private int diameter = 20;
 		
+		public PacMan()
+		{
+			ImageIcon imageIcon = new ImageIcon("images/pacman open.png");
+			Image image = imageIcon.getImage(); 
+			Image newimg = image.getScaledInstance(diameter, diameter,  java.awt.Image.SCALE_SMOOTH);
+			imageIcon = new ImageIcon(newimg);
+			JLabel imageLabel = new JLabel(imageIcon);
+			imageLabel.setBounds(0, 0, diameter, diameter);
+			add(imageLabel);
+		}
 		
 		public void update()
 		{
@@ -29,6 +39,11 @@ public class PacMan extends JLabel
 		public int getDx() 
 		{
 			return dx;
+		}
+		
+		public int getDy()
+		{
+			return dy;
 		}
 		
 		public boolean canGoUp(int[][] map)
@@ -52,9 +67,10 @@ public class PacMan extends JLabel
 			return true;
 		}
 		
-		public int getDy()
+		public int getDiameter()
 		{
-			return dy;
+			return diameter;
 		}
+		
 		
 }
