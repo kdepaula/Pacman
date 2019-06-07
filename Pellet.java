@@ -1,18 +1,19 @@
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.geom.Ellipse2D;
+import java.awt.Rectangle;
 
 import javax.swing.JComponent;
 
 public class Pellet extends JComponent
 {
 	//field
-	private Ellipse2D.Double ball;
+	private Rectangle.Double ball;
 	
 	//constructor
 	public Pellet(int x, int y)
 	{
-		ball = new Ellipse2D.Double(12,12,6,6);
+		ball = new Rectangle.Double(13,13,4,4);
 		setLocation(x,y);
 		setSize(25,25);
 	}
@@ -20,6 +21,7 @@ public class Pellet extends JComponent
 	public void paintComponent(Graphics g)
 	{
 		Graphics2D g2 = (Graphics2D) g;
-		g2.draw(ball);
+		g2.setColor(Color.PINK);
+		g2.fill(ball);
 	}
 }
