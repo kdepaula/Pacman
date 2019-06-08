@@ -14,11 +14,22 @@ import javax.swing.Timer;
 public class PacmanBoard extends JFrame implements ActionListener
 {
 	PacMan man = new PacMan();
+	BlueGhost blueGhost = new BlueGhost();
 
 	private int counter = 0;
+	
+	/**
+	 * keeps track of the most recently pressed key
+	 * so that the current image of pacman may be displayed
+	 * 'r' is right, 'l' is left, 'd' is down, 'u' is up
+	 */
 	private char currentImage = 'r';
 	
-	private int[][] map = {
+	/**
+	 * two dimensional array that displays the map
+	 */
+	private int[][] map = 
+	{
 		{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
 		{1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1},
 		{1,0,1,1,0,1,1,1,0,1,0,1,1,1,0,1,1,0,1},
@@ -47,8 +58,10 @@ public class PacmanBoard extends JFrame implements ActionListener
 		setBounds(200, 50, 585, 695);
 		setLayout(null);
 		getContentPane().setBackground(Color.BLACK);
-		man.setBounds(275, 483, man.getDiameter() + 10, man.getDiameter() + 10);
+		man.setBounds(270, 480, man.getDiameter(), man.getDiameter());
+		blueGhost.setBounds(270, 250, blueGhost.getWidth(), blueGhost.getHeight());
 		this.add(man);
+		this.add(blueGhost);
 		setResizable(false);
 		int xVal = 0;
 		int yVal = 0;
@@ -58,12 +71,11 @@ public class PacmanBoard extends JFrame implements ActionListener
 
 			public void keyPressed(KeyEvent e) 
 			{	
-				
 				if(e.getKeyCode() == e.VK_S)
 				{
 					currentImage = 'd';
 					setDown();
-					man.setDy(2);
+					man.setDy(3);
 					man.setDx(0);					
 				}
 					
@@ -71,7 +83,7 @@ public class PacmanBoard extends JFrame implements ActionListener
 				{
 						currentImage = 'u';
 						setUp();
-						man.setDy(-2);
+						man.setDy(-3);
 						man.setDx(0);
 				}
 					
@@ -79,7 +91,7 @@ public class PacmanBoard extends JFrame implements ActionListener
 				{
 					currentImage = 'r';
 					setRight();
-					man.setDx(2);
+					man.setDx(3);
 					man.setDy(0);
 				}
 					
@@ -87,7 +99,7 @@ public class PacmanBoard extends JFrame implements ActionListener
 				{
 					currentImage = 'l';
 					setLeft();
-					man.setDx(-2);
+					man.setDx(-3);
 					man.setDy(0);
 				}
 			}
@@ -137,11 +149,8 @@ public class PacmanBoard extends JFrame implements ActionListener
 		
 		public void actionPerformed(ActionEvent e) 
 		{	
-			if(man.canGoUp(map) && man.canGoDown(map) && man.canGoLeft(map) && man.canGoRight(map))
-			{
-				man.update();
-				this.fixBounds();
-			}
+			man.update();
+			this.fixBounds();
 			counter++;
 			if(counter == 6)
 			{
@@ -156,6 +165,10 @@ public class PacmanBoard extends JFrame implements ActionListener
 
 		}
 		
+		/**
+		 * fixes the bounds of pacman so that it does
+		 * not go outside of the screen
+		 */
 		public void fixBounds()
 		{
 			
@@ -179,12 +192,11 @@ public class PacmanBoard extends JFrame implements ActionListener
 			{
 				man.setLocation(585, man.getY());
 			}
-			if(man.getX() == (540) && (300 < man.getY() << 320))
-			{
-				man.setLocation(0, man.getY());
-			}
 		}
 		
+		/**
+		 * sets the image of pacman to the left
+		 */
 		public void setLeft()
 		{
 			man.removeAll();
@@ -197,6 +209,9 @@ public class PacmanBoard extends JFrame implements ActionListener
 			man.add(imageLabel);
 		}
 		
+		/**
+		 * sets the image of pacman to the right
+		 */
 		public void setRight()
 		{
 			man.removeAll();
@@ -209,6 +224,9 @@ public class PacmanBoard extends JFrame implements ActionListener
 			man.add(imageLabel);
 		}
 		
+		/**
+		 * sets the image of pacman up
+		 */
 		public void setUp()
 		{
 			man.removeAll();
@@ -221,6 +239,9 @@ public class PacmanBoard extends JFrame implements ActionListener
 			man.add(imageLabel);
 		}
 		
+		/**
+		 * sets the image of pacman down
+		 */
 		public void setDown()
 		{
 			man.removeAll();
@@ -233,6 +254,9 @@ public class PacmanBoard extends JFrame implements ActionListener
 			man.add(imageLabel);
 		}
 		
+		/**
+		 * sets the image of pacman to the closed mouth
+		 */
 		public void closeMouth()
 		{
 				man.removeAll();
@@ -244,54 +268,31 @@ public class PacmanBoard extends JFrame implements ActionListener
 				imageLabel.setBounds(0, 0, man.getDiameter(), man.getDiameter());
 				man.add(imageLabel);
 		}
+		
+		/**
+		 * sets the pacman to the appropriate image based on
+		 * the key most recently pressed
+		 */
 		public void setCurrentImage()
 		{
 			if(currentImage == 'r')
 				{
-					man.removeAll();
-					ImageIcon imageIcon = new ImageIcon("images/pacman open.png");
-					Image image = imageIcon.getImage(); 
-					Image newimg = image.getScaledInstance(man.getDiameter(), man.getDiameter(),  java.awt.Image.SCALE_SMOOTH);
-					imageIcon = new ImageIcon(newimg);
-					JLabel imageLabel = new JLabel(imageIcon);
-					imageLabel.setBounds(0, 0, man.getDiameter(), man.getDiameter());
-					man.add(imageLabel);
+					setRight();
 				}
 				
 				if(currentImage == 'l')
 				{
-					man.removeAll();
-					ImageIcon imageIcon = new ImageIcon("images/pacman open left.png");
-					Image image = imageIcon.getImage(); 
-					Image newimg = image.getScaledInstance(man.getDiameter(), man.getDiameter(),  java.awt.Image.SCALE_SMOOTH);
-					imageIcon = new ImageIcon(newimg);
-					JLabel imageLabel = new JLabel(imageIcon);
-					imageLabel.setBounds(0, 0, man.getDiameter(), man.getDiameter());
-					man.add(imageLabel);
+					setLeft();
 				}
 				
 				if(currentImage == 'u')
 				{
-					man.removeAll();
-					ImageIcon imageIcon = new ImageIcon("images/pacman open up.png");
-					Image image = imageIcon.getImage(); 
-					Image newimg = image.getScaledInstance(man.getDiameter(), man.getDiameter(),  java.awt.Image.SCALE_SMOOTH);
-					imageIcon = new ImageIcon(newimg);
-					JLabel imageLabel = new JLabel(imageIcon);
-					imageLabel.setBounds(0, 0, man.getDiameter(), man.getDiameter());
-					man.add(imageLabel);
+					setUp();
 				}
 				
 				if(currentImage == 'd')
 				{
-					man.removeAll();
-					ImageIcon imageIcon = new ImageIcon("images/pacman open down.png");
-					Image image = imageIcon.getImage(); 
-					Image newimg = image.getScaledInstance(man.getDiameter(), man.getDiameter(),  java.awt.Image.SCALE_SMOOTH);
-					imageIcon = new ImageIcon(newimg);
-					JLabel imageLabel = new JLabel(imageIcon);
-					imageLabel.setBounds(0, 0, man.getDiameter(), man.getDiameter());
-					man.add(imageLabel);
+					setDown();
 				}
 		}
 	
@@ -299,6 +300,7 @@ public class PacmanBoard extends JFrame implements ActionListener
 	{
 		return map;
 	}
+	
 	public static void main (String[] args)
 	{
 		PacmanBoard board = new PacmanBoard();
