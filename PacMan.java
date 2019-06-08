@@ -9,11 +9,11 @@ public class PacMan extends JComponent
 {
 		private int dx;
 		private int dy;
-		private int diameter = 20;
+		private int diameter = 25;
 		
 		public PacMan()
 		{
-			ImageIcon imageIcon = new ImageIcon("images/pacman open.png");
+			ImageIcon imageIcon = new ImageIcon("images/pacman closed.png");
 			Image image = imageIcon.getImage(); 
 			Image newimg = image.getScaledInstance(diameter, diameter,  java.awt.Image.SCALE_SMOOTH);
 			imageIcon = new ImageIcon(newimg);

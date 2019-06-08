@@ -44,11 +44,12 @@ public class PacmanBoard extends JFrame implements ActionListener
 	};
 	public PacmanBoard()
 	{
-		setBounds(0, 0, 585, 695);
+		setBounds(200, 50, 585, 695);
 		setLayout(null);
 		getContentPane().setBackground(Color.BLACK);
-		man.setBounds(5, 5, man.getDiameter() + 10, man.getDiameter() + 10);
+		man.setBounds(275, 483, man.getDiameter() + 10, man.getDiameter() + 10);
 		this.add(man);
+		setResizable(false);
 		int xVal = 0;
 		int yVal = 0;
 			
@@ -62,7 +63,7 @@ public class PacmanBoard extends JFrame implements ActionListener
 				{
 					currentImage = 'd';
 					setDown();
-					man.setDy(3);
+					man.setDy(2);
 					man.setDx(0);					
 				}
 					
@@ -70,7 +71,7 @@ public class PacmanBoard extends JFrame implements ActionListener
 				{
 						currentImage = 'u';
 						setUp();
-						man.setDy(-3);
+						man.setDy(-2);
 						man.setDx(0);
 				}
 					
@@ -78,7 +79,7 @@ public class PacmanBoard extends JFrame implements ActionListener
 				{
 					currentImage = 'r';
 					setRight();
-					man.setDx(3);
+					man.setDx(2);
 					man.setDy(0);
 				}
 					
@@ -86,7 +87,7 @@ public class PacmanBoard extends JFrame implements ActionListener
 				{
 					currentImage = 'l';
 					setLeft();
-					man.setDx(-3);
+					man.setDx(-2);
 					man.setDy(0);
 				}
 			}
@@ -136,16 +137,18 @@ public class PacmanBoard extends JFrame implements ActionListener
 		
 		public void actionPerformed(ActionEvent e) 
 		{	
-			this.fixBounds();
-			man.update();
+			if(man.canGoUp(map) && man.canGoDown(map) && man.canGoLeft(map) && man.canGoRight(map))
+			{
+				man.update();
+				this.fixBounds();
+			}
 			counter++;
-			System.out.print(counter);
-			if(counter == 10)
+			if(counter == 6)
 			{
 				setCurrentImage();
 			}
 			
-			if(counter == 20)
+			if(counter == 12)
 			{
 				closeMouth();
 				counter = 0;
@@ -171,6 +174,14 @@ public class PacmanBoard extends JFrame implements ActionListener
 			if(man.getY() > this.getHeight() - man.getHeight())
 			{
 				man.setLocation(man.getX(), this.getHeight() - man.getHeight());
+			}
+			if(man.getX() == 0 && (300 < man.getY() << 320))
+			{
+				man.setLocation(585, man.getY());
+			}
+			if(man.getX() == (540) && (300 < man.getY() << 320))
+			{
+				man.setLocation(0, man.getY());
 			}
 		}
 		
