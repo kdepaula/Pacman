@@ -64,10 +64,12 @@ public class PacmanBoard extends JFrame implements ActionListener
 		setBounds(200, 50, 585, 695);
 		setLayout(null);
 		getContentPane().setBackground(Color.BLACK);
-		man.setBounds(5, 95, man.getDiameter(), man.getDiameter());
+		man.setBounds(270, 360, man.getDiameter() + 2, man.getDiameter() + 2);
 		blueGhost.setBounds(0, 0, blueGhost.getWidth(), blueGhost.getHeight());
 		this.add(man);
 		this.add(blueGhost);
+		man.setDx(0);
+		man.setDy(0);
 		setResizable(false);
 		int xVal = 0;
 		int yVal = 0;
@@ -79,34 +81,22 @@ public class PacmanBoard extends JFrame implements ActionListener
 			{	
 				if(e.getKeyCode() == e.VK_S)
 				{
-					currentImage = 'd';
-					setDown();
-					man.setDy(3);
-					man.setDx(0);					
+					currentImage = 'd';	
 				}
 					
 				if(e.getKeyCode() == e.VK_W)
 				{
-						currentImage = 'u';
-						setUp();
-						man.setDy(-3);
-						man.setDx(0);
+					currentImage = 'u';
 				}
 					
 				if(e.getKeyCode() == e.VK_D)
 				{
 					currentImage = 'r';
-					setRight();
-					man.setDx(3);
-					man.setDy(0);
 				}
 					
 				if(e.getKeyCode() == e.VK_A)
 				{
 					currentImage = 'l';
-					setLeft();
-					man.setDx(-3);
-					man.setDy(0);
 				}
 			}
 
@@ -157,18 +147,27 @@ public class PacmanBoard extends JFrame implements ActionListener
 		
 		public void actionPerformed(ActionEvent e) 
 		{
-			man.update();
+			man.update(currentImage, map);
 			counter++;
-			if(counter == 8)
-			{
-				setCurrentImage();
-			}
-			
 			if(counter == 16)
 			{
-				closeMouth();
 				counter = 0;
 			}
+			else if (counter > 8)
+			{
+				closeMouth();
+			}
+			else
+			{
+				setCurrentImage();
+				
+				if(man.getDy() == -3) {setUp();}
+				if(man.getDy() == 3) {setDown();}
+				if(man.getDx() == -3) {setLeft();}
+				if(man.getDx() == 3) {setRight();}
+				
+			}
+			
 			blueGhost.update();
 			this.fixBounds();
 		}
