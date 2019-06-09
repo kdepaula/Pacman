@@ -16,10 +16,10 @@ public class PacmanBoard extends JFrame implements ActionListener
 {
 	PacMan man = new PacMan();
 	BlueGhost blueGhost = new BlueGhost();
+	RedGhost red = new RedGhost();
 	Sound sound = new Sound();
 
 	private int counter = 0;
-	private ArrayList<Wall> arr;
 	
 	
 	/**
@@ -59,13 +59,13 @@ public class PacmanBoard extends JFrame implements ActionListener
 	};
 	public PacmanBoard()
 	{
-		arr = new ArrayList<Wall>();
 		sound.playSound();
 		setBounds(200, 50, 585, 695);
 		setLayout(null);
 		getContentPane().setBackground(Color.BLACK);
 		man.setBounds(270, 360, man.getDiameter() + 2, man.getDiameter() + 2);
-		blueGhost.setBounds(0, 0, blueGhost.getWidth(), blueGhost.getHeight());
+		red.setBounds(270, 360, red.getDiameter() + 2, red.getDiameter() + 2);
+		red.setVisible(true);
 		this.add(man);
 		this.add(blueGhost);
 		man.setDx(0);
@@ -123,7 +123,6 @@ public class PacmanBoard extends JFrame implements ActionListener
 					{
 						Wall wall = new Wall(xVal, yVal);
 						add(wall);
-						arr.add(wall);
 					}
 					if(map[i][j] == 0)
 					{
@@ -155,21 +154,21 @@ public class PacmanBoard extends JFrame implements ActionListener
 			}
 			else if (counter > 8)
 			{
-				closeMouth();
+				man.closeMouth();
 			}
 			else
 			{
 				setCurrentImage();
 				
-				if(man.getDy() == -3) {setUp();}
-				if(man.getDy() == 3) {setDown();}
-				if(man.getDx() == -3) {setLeft();}
-				if(man.getDx() == 3) {setRight();}
+				if(man.getDy() == -3) {man.setUp();}
+				if(man.getDy() == 3) {man.setDown();}
+				if(man.getDx() == -3) {man.setLeft();}
+				if(man.getDx() == 3) {man.setRight();}
 				
 			}
 			
-			blueGhost.update();
-			this.fixBounds();
+			red.update();
+			fixBounds();
 		}
 		
 		/**
@@ -178,119 +177,9 @@ public class PacmanBoard extends JFrame implements ActionListener
 		 */
 		public void fixBounds()
 		{
-			if(man.getX() < 0)
-			{
-				man.setLocation(0, man.getY());
-			}
-			if(man.getX() > (this.getWidth() - man.getWidth()))
-			{
-				man.setLocation(this.getWidth() - man.getWidth(), man.getY());
-			}
-			if(man.getY() < 0)
-			{
-				man.setLocation(man.getX(), 0);
-			}
-			if(man.getY() > this.getHeight() - man.getHeight())
-			{
-				man.setLocation(man.getX(), this.getHeight() - man.getHeight());
-			}
-			if(man.getX() == 0 && (300 < man.getY() << 320))
-			{
-				man.setLocation(585, man.getY());
-			}
-		}
-		
-		public boolean isTouchingWall()
-		{
-			for(Wall w: arr)
-			{
-				if(man.getRect().intersects(w.getXValue(), w.getYValue(), w.getThickness(), w.getThickness()));
-				{
 
-					System.out.println("touching a wall");
-					return true;
-				}
-			}
-			System.out.println("OK");
-			return false;
 		}
 		
-		
-		
-		/**
-		 * sets the image of pacman to the left
-		 */
-		public void setLeft()
-		{
-			man.removeAll();
-			ImageIcon imageIcon = new ImageIcon("images/pacman open left.png");
-			Image image = imageIcon.getImage(); 
-			Image newimg = image.getScaledInstance(man.getDiameter(), man.getDiameter(),  java.awt.Image.SCALE_SMOOTH);
-			imageIcon = new ImageIcon(newimg);
-			JLabel imageLabel = new JLabel(imageIcon);
-			imageLabel.setBounds(0, 0, man.getDiameter(), man.getDiameter());
-			man.add(imageLabel);
-		}
-		
-		/**
-		 * sets the image of pacman to the right
-		 */
-		public void setRight()
-		{
-			man.removeAll();
-			ImageIcon imageIcon = new ImageIcon("images/pacman open.png");
-			Image image = imageIcon.getImage(); 
-			Image newimg = image.getScaledInstance(man.getDiameter(), man.getDiameter(),  java.awt.Image.SCALE_SMOOTH);
-			imageIcon = new ImageIcon(newimg);
-			JLabel imageLabel = new JLabel(imageIcon);
-			imageLabel.setBounds(0, 0, man.getDiameter(), man.getDiameter());
-			man.add(imageLabel);
-		}
-		
-		/**
-		 * sets the image of pacman up
-		 */
-		public void setUp()
-		{
-			man.removeAll();
-			ImageIcon imageIcon = new ImageIcon("images/pacman open up.png");
-			Image image = imageIcon.getImage(); 
-			Image newimg = image.getScaledInstance(man.getDiameter(), man.getDiameter(),  java.awt.Image.SCALE_SMOOTH);
-			imageIcon = new ImageIcon(newimg);
-			JLabel imageLabel = new JLabel(imageIcon);
-			imageLabel.setBounds(0, 0, man.getDiameter(), man.getDiameter());
-			man.add(imageLabel);
-		}
-		
-		/**
-		 * sets the image of pacman down
-		 */
-		public void setDown()
-		{
-			man.removeAll();
-			ImageIcon imageIcon = new ImageIcon("images/pacman open down.png");
-			Image image = imageIcon.getImage(); 
-			Image newimg = image.getScaledInstance(man.getDiameter(), man.getDiameter(),  java.awt.Image.SCALE_SMOOTH);
-			imageIcon = new ImageIcon(newimg);
-			JLabel imageLabel = new JLabel(imageIcon);
-			imageLabel.setBounds(0, 0, man.getDiameter(), man.getDiameter());
-			man.add(imageLabel);
-		}
-		
-		/**
-		 * sets the image of pacman to the closed mouth
-		 */
-		public void closeMouth()
-		{
-				man.removeAll();
-				ImageIcon imageIcon = new ImageIcon("images/pacman closed.png");
-				Image image = imageIcon.getImage(); 
-				Image newimg = image.getScaledInstance(man.getDiameter(), man.getDiameter(),  java.awt.Image.SCALE_SMOOTH);
-				imageIcon = new ImageIcon(newimg);
-				JLabel imageLabel = new JLabel(imageIcon);
-				imageLabel.setBounds(0, 0, man.getDiameter(), man.getDiameter());
-				man.add(imageLabel);
-		}
 		
 		/**
 		 * sets the pacman to the appropriate image based on
@@ -300,29 +189,24 @@ public class PacmanBoard extends JFrame implements ActionListener
 		{
 			if(currentImage == 'r')
 				{
-					setRight();
+					man.setRight();
 				}
 				
 				if(currentImage == 'l')
 				{
-					setLeft();
+					man.setLeft();
 				}
 				
 				if(currentImage == 'u')
 				{
-					setUp();
+					man.setUp();
 				}
 				
 				if(currentImage == 'd')
 				{
-					setDown();
+					man.setDown();
 				}
 		}
-	
-	public int[][] getMap()
-	{
-		return map;
-	}
 	
 	public static void main (String[] args)
 	{

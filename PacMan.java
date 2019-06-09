@@ -14,7 +14,6 @@ public class PacMan extends JComponent
 		private int dx;
 		private int dy;
 		private int diameter = 30;
-		private Rectangle2D.Double rect;
 		
 		/**
 		 * Creates the ImageIcon of Pacman, adds it to a JLabel
@@ -28,14 +27,7 @@ public class PacMan extends JComponent
 			imageIcon = new ImageIcon(newimg);
 			JLabel imageLabel = new JLabel(imageIcon);
 			imageLabel.setBounds(0, 0, diameter, diameter);
-			rect = new Rectangle2D.Double(0,0,diameter,diameter);
 			add(imageLabel);
-		}
-		
-		public void  paintComponent (Graphics g)
-		{
-			Graphics2D g2 = (Graphics2D) g;
-			g2.setColor(Color.PINK);
 		}
 		
 		/**
@@ -135,6 +127,15 @@ public class PacMan extends JComponent
 			return true;
 		}
 		
+		public boolean isHittingPellet(int[][] map)
+		{
+			if(map[((getY()-2)/30)][getX()/30] == 0 || map[((getY()-2)/30)][(getX()-2)/30 + 1] == 0) 
+			{
+				return false;
+			}
+			return true;
+		}
+		
 		/**
 		 * returns the diameter of the pacman image
 		 * @return the diameter of the pacman image
@@ -145,13 +146,77 @@ public class PacMan extends JComponent
 		}
 		
 		/**
-		 * Returns the rectangle around pacman
-		 * @return the invisible rectangle surrounding pacman
+		 * sets the image of pacman to the left
 		 */
-		public Rectangle2D.Double getRect()
+		public void setLeft()
 		{
-			return rect;
+			removeAll();
+			ImageIcon imageIcon = new ImageIcon("images/pacman open left.png");
+			Image image = imageIcon.getImage(); 
+			Image newimg = image.getScaledInstance(getDiameter(), getDiameter(),  java.awt.Image.SCALE_SMOOTH);
+			imageIcon = new ImageIcon(newimg);
+			JLabel imageLabel = new JLabel(imageIcon);
+			imageLabel.setBounds(0, 0, getDiameter(), getDiameter());
+			add(imageLabel);
 		}
 		
+		/**
+		 * sets the image of pacman to the right
+		 */
+		public void setRight()
+		{
+			removeAll();
+			ImageIcon imageIcon = new ImageIcon("images/pacman open.png");
+			Image image = imageIcon.getImage(); 
+			Image newimg = image.getScaledInstance(getDiameter(), getDiameter(),  java.awt.Image.SCALE_SMOOTH);
+			imageIcon = new ImageIcon(newimg);
+			JLabel imageLabel = new JLabel(imageIcon);
+			imageLabel.setBounds(0, 0, getDiameter(), getDiameter());
+			add(imageLabel);
+		}
 		
+		/**
+		 * sets the image of pacman up
+		 */
+		public void setUp()
+		{
+			removeAll();
+			ImageIcon imageIcon = new ImageIcon("images/pacman open up.png");
+			Image image = imageIcon.getImage(); 
+			Image newimg = image.getScaledInstance(getDiameter(), getDiameter(),  java.awt.Image.SCALE_SMOOTH);
+			imageIcon = new ImageIcon(newimg);
+			JLabel imageLabel = new JLabel(imageIcon);
+			imageLabel.setBounds(0, 0, getDiameter(), getDiameter());
+			add(imageLabel);
+		}
+		
+		/**
+		 * sets the image of pacman down
+		 */
+		public void setDown()
+		{
+			removeAll();
+			ImageIcon imageIcon = new ImageIcon("images/pacman open down.png");
+			Image image = imageIcon.getImage(); 
+			Image newimg = image.getScaledInstance(getDiameter(), getDiameter(),  java.awt.Image.SCALE_SMOOTH);
+			imageIcon = new ImageIcon(newimg);
+			JLabel imageLabel = new JLabel(imageIcon);
+			imageLabel.setBounds(0, 0, getDiameter(), getDiameter());
+			add(imageLabel);
+		}
+		
+		/**
+		 * sets the image of pacman to the closed mouth
+		 */
+		public void closeMouth()
+		{
+				removeAll();
+				ImageIcon imageIcon = new ImageIcon("images/pacman closed.png");
+				Image image = imageIcon.getImage(); 
+				Image newimg = image.getScaledInstance(getDiameter(), getDiameter(),  java.awt.Image.SCALE_SMOOTH);
+				imageIcon = new ImageIcon(newimg);
+				JLabel imageLabel = new JLabel(imageIcon);
+				imageLabel.setBounds(0, 0, getDiameter(), getDiameter());
+				add(imageLabel);
+		}
 }
