@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -12,7 +13,7 @@ public class PacMan extends JComponent
 {
 		private int dx;
 		private int dy;
-		private int diameter = 30;
+		private int diameter = 20;
 		private Rectangle2D.Double rect;
 		
 		/**
@@ -26,9 +27,16 @@ public class PacMan extends JComponent
 			Image newimg = image.getScaledInstance(diameter, diameter,  java.awt.Image.SCALE_SMOOTH);
 			imageIcon = new ImageIcon(newimg);
 			JLabel imageLabel = new JLabel(imageIcon);
-			imageLabel.setBounds(2, 2, diameter, diameter);
+			imageLabel.setBounds(0, 0, diameter, diameter);
 			add(imageLabel);
-			rect = new Rectangle2D.Double(2, 2, diameter, diameter);
+			rect = new Rectangle2D.Double(0, 0, diameter, diameter);
+		}
+		
+		public void  paintComponent (Graphics g)
+		{
+			Graphics2D g2 = (Graphics2D) g;
+			g2.setColor(Color.PINK);
+			g2.draw(rect);
 		}
 		
 		/**
@@ -103,6 +111,15 @@ public class PacMan extends JComponent
 		public int getDiameter()
 		{
 			return diameter;
+		}
+		
+		/**
+		 * Returns the rectangle around pacman
+		 * @return the invisible rectangle surrounding pacman
+		 */
+		public Rectangle2D.Double getRect()
+		{
+			return rect;
 		}
 		
 		

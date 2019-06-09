@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
@@ -15,8 +16,10 @@ public class PacmanBoard extends JFrame implements ActionListener
 {
 	PacMan man = new PacMan();
 	BlueGhost blueGhost = new BlueGhost();
+	Sound sound = new Sound();
 
 	private int counter = 0;
+	private ArrayList<Wall> arr;
 	
 	/**
 	 * keeps track of the most recently pressed key
@@ -55,11 +58,13 @@ public class PacmanBoard extends JFrame implements ActionListener
 	};
 	public PacmanBoard()
 	{
+		arr = new ArrayList<Wall>();
+		sound.playSound();
 		setBounds(200, 50, 585, 695);
 		setLayout(null);
 		getContentPane().setBackground(Color.BLACK);
-		man.setBounds(270, 480, man.getDiameter(), man.getDiameter());
-		blueGhost.setBounds(270, 250, blueGhost.getWidth(), blueGhost.getHeight());
+		man.setBounds(35, 35, man.getDiameter(), man.getDiameter());
+		blueGhost.setBounds(0, 0, blueGhost.getWidth(), blueGhost.getHeight());
 		this.add(man);
 		this.add(blueGhost);
 		setResizable(false);
@@ -127,6 +132,7 @@ public class PacmanBoard extends JFrame implements ActionListener
 					{
 						Wall wall = new Wall(xVal, yVal);
 						add(wall);
+						arr.add(wall);
 					}
 					if(map[i][j] == 0)
 					{
@@ -147,10 +153,11 @@ public class PacmanBoard extends JFrame implements ActionListener
 			this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 		
+		
 		public void actionPerformed(ActionEvent e) 
-		{	
+		{
+			if(!isTouchingWall());
 			man.update();
-			this.fixBounds();
 			counter++;
 			if(counter == 6)
 			{
@@ -162,7 +169,8 @@ public class PacmanBoard extends JFrame implements ActionListener
 				closeMouth();
 				counter = 0;
 			}
-
+			blueGhost.update();
+			this.fixBounds();
 		}
 		
 		/**
@@ -171,7 +179,6 @@ public class PacmanBoard extends JFrame implements ActionListener
 		 */
 		public void fixBounds()
 		{
-			
 			if(man.getX() < 0)
 			{
 				man.setLocation(0, man.getY());
@@ -192,6 +199,21 @@ public class PacmanBoard extends JFrame implements ActionListener
 			{
 				man.setLocation(585, man.getY());
 			}
+		}
+		
+		public boolean isTouchingWall()
+		{
+			for(Wall w: arr)
+			{
+				if(man.getRect().intersects(w.getXValue(), w.getYValue(), w.getThickness(), w.getThickness()));
+				{
+
+					System.out.println("touching a wall");
+					return true;
+				}
+			}
+			System.out.println("OK");
+			return false;
 		}
 		
 		/**

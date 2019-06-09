@@ -2,18 +2,34 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.geom.Rectangle2D;
 
 import javax.swing.JComponent;
 
 public class Wall extends JComponent
 {
-	private Rectangle wall;
+	private Rectangle2D.Double wall;
+	private int thickness = 30;
+	private int x;
+	private int y;
 	
-	public Wall(int x, int y)
+	public Wall(int a, int b)
 	{
-		wall = new Rectangle(0,0,30,30);
+		x = a;
+		y = b;
+		wall = new Rectangle2D.Double(0,0,thickness,thickness);
 		setLocation(x,y);
-		setSize(30,30);
+		setSize(thickness,thickness);
+	}
+	
+	public int getXValue()
+	{
+		return x;
+	}
+	
+	public int getYValue()
+	{
+		return y;
 	}
 	
 	public void  paintComponent (Graphics g)
@@ -21,6 +37,11 @@ public class Wall extends JComponent
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setColor(Color.BLUE);
 		g2.fill(wall);
+	}
+	
+	public int getThickness()
+	{
+		return thickness;
 	}
 	
 }
