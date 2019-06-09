@@ -13,7 +13,7 @@ public class PacMan extends JComponent
 {
 		private int dx;
 		private int dy;
-		private int diameter = 20;
+		private int diameter = 30;
 		private Rectangle2D.Double rect;
 		
 		/**
@@ -28,23 +28,54 @@ public class PacMan extends JComponent
 			imageIcon = new ImageIcon(newimg);
 			JLabel imageLabel = new JLabel(imageIcon);
 			imageLabel.setBounds(0, 0, diameter, diameter);
+			rect = new Rectangle2D.Double(0,0,diameter,diameter);
 			add(imageLabel);
-			rect = new Rectangle2D.Double(0, 0, diameter, diameter);
 		}
 		
 		public void  paintComponent (Graphics g)
 		{
 			Graphics2D g2 = (Graphics2D) g;
 			g2.setColor(Color.PINK);
-			g2.draw(rect);
 		}
 		
 		/**
 		 * Updates the location of pacman based on its current location and dy and dx
 		 */
-		public void update()
+		public void update(char currentImage, int[][] map)
 		{
-			setLocation(getX() + dx, getY() + dy);
+			if(currentImage == 'u' && canGoUp(map))
+			{
+				setDy(-3);
+				setDx(0);
+				setLocation(getX() + dx, getY() + dy);
+			}
+			else if(currentImage == 'd' && canGoDown(map))
+			{
+				setDy(3);
+				setDx(0);
+				setLocation(getX() + dx, getY() + dy);
+			}
+			else if(currentImage == 'r' && canGoRight(map))
+			{
+				setDx(3);
+				setDy(0);
+				setLocation(getX() + dx, getY() + dy);
+			}
+			else if(currentImage == 'l' && canGoLeft(map))
+			{
+				setDx(-3);
+				setDy(0);
+				setLocation(getX() + dx, getY() + dy);
+			}
+			else
+			{
+				setLocation(getX() + dx, getY() + dy);
+			}
+			
+			if((dy == 3 && !canGoDown(map)) || (dy == -3 && !canGoUp(map)) || (dx == 3 && !canGoRight(map)) || (dx == -3 && !canGoLeft(map)))
+			{
+				setLocation(getX(), getY());
+			}
 		}
 		
 		/**
@@ -85,22 +116,22 @@ public class PacMan extends JComponent
 		
 		public boolean canGoUp(int[][] map)
 		{
-			if(map[(getY()/30)-1][getX()/30] == 1) {return false;}
+			if(map[((getY()-2)/30)][getX()/30] == 1 || map[((getY()-2)/30)][(getX()-2)/30 + 1] == 1) {setDy(0); return false;}
 			return true;
 		}
 		public boolean canGoDown(int[][] map)
 		{
-			if(map[(getY()/30)+1][getX()/30] == 1) {return false;}
+			if(map[((getY()+2)/30)+1][getX()/30] == 1 || map[((getY()+2)/30)+1][(getX()-2)/30 + 1] == 1) {setDy(0); return false;}
 			return true;
 		}
 		public boolean canGoLeft(int[][] map)
 		{
-			if(map[(getY()/30)][(getX()/30)-1] == 1) {return false;}
+			if(map[(getY()/30)][((getX()-2)/30)] == 1 || map[(getY()-2)/30 + 1][((getX()-2)/30)] == 1) {setDx(0); return false;}
 			return true;
 		}
 		public boolean canGoRight(int[][] map)
 		{
-			if(map[(getY()/30)-1][(getX()/30)+1] == 1) {return false;}
+			if(map[(getY()/30)][((getX()+2)/30)+1] == 1 || map[(getY()-2)/30 + 1][((getX()+2)/30) + 1] == 1) {setDx(0); return false;}
 			return true;
 		}
 		
