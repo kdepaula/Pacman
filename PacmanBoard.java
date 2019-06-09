@@ -21,6 +21,7 @@ public class PacmanBoard extends JFrame implements ActionListener
 	private int counter = 0;
 	private ArrayList<Wall> arr;
 	
+	
 	/**
 	 * keeps track of the most recently pressed key
 	 * so that the current image of pacman may be displayed
@@ -63,7 +64,7 @@ public class PacmanBoard extends JFrame implements ActionListener
 		setBounds(200, 50, 585, 695);
 		setLayout(null);
 		getContentPane().setBackground(Color.BLACK);
-		man.setBounds(35, 35, man.getDiameter(), man.getDiameter());
+		man.setBounds(5, 95, man.getDiameter(), man.getDiameter());
 		blueGhost.setBounds(0, 0, blueGhost.getWidth(), blueGhost.getHeight());
 		this.add(man);
 		this.add(blueGhost);
@@ -156,15 +157,14 @@ public class PacmanBoard extends JFrame implements ActionListener
 		
 		public void actionPerformed(ActionEvent e) 
 		{
-			if(!isTouchingWall());
 			man.update();
 			counter++;
-			if(counter == 6)
+			if(counter == 8)
 			{
 				setCurrentImage();
 			}
 			
-			if(counter == 12)
+			if(counter == 16)
 			{
 				closeMouth();
 				counter = 0;
@@ -215,6 +215,8 @@ public class PacmanBoard extends JFrame implements ActionListener
 			System.out.println("OK");
 			return false;
 		}
+		
+		
 		
 		/**
 		 * sets the image of pacman to the left
