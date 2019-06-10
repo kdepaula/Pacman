@@ -1,5 +1,6 @@
 
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
 
 import javax.swing.ImageIcon;
@@ -12,6 +13,7 @@ public class RedGhost extends JComponent
 		private int dx;
 		private int dy;
 		private int diameter = 30;
+		private Rectangle rect;
 		private char lastDirectionTurned = 'd';
 		private int relativeQuadrant = 1;
 		
@@ -24,9 +26,13 @@ public class RedGhost extends JComponent
 			JLabel imageLabel = new JLabel(imageIcon);
 			imageLabel.setBounds(0, 0, diameter, diameter);
 			add(imageLabel);
+			rect = new Rectangle(0, 0, diameter, diameter);
 		}
 		
-		
+		public Rectangle getRect()
+		{
+			return rect;
+		}
 		public void setDx(int a)
 		{
 			dx = a;
@@ -139,32 +145,56 @@ public class RedGhost extends JComponent
 			add(imageLabel);
 		}
 		
+		public void setScared()
+		{
+			removeAll();
+			ImageIcon imageIcon = new ImageIcon("images/Scared Ghost.png");
+			Image image = imageIcon.getImage(); 
+			Image newimg = image.getScaledInstance(getDiameter(), getDiameter(),  java.awt.Image.SCALE_SMOOTH);
+			imageIcon = new ImageIcon(newimg);
+			JLabel imageLabel = new JLabel(imageIcon);
+			imageLabel.setBounds(0, 0, getDiameter(), getDiameter());
+			add(imageLabel);
+		}
+		
+		public void setScaredAlt()
+		{
+			removeAll();
+			ImageIcon imageIcon = new ImageIcon("images/Scared Ghost Alt.png");
+			Image image = imageIcon.getImage(); 
+			Image newimg = image.getScaledInstance(getDiameter(), getDiameter(),  java.awt.Image.SCALE_SMOOTH);
+			imageIcon = new ImageIcon(newimg);
+			JLabel imageLabel = new JLabel(imageIcon);
+			imageLabel.setBounds(0, 0, getDiameter(), getDiameter());
+			add(imageLabel);
+		}
+		
 		public void moveUp()
 		{
 			setDy(-3);
 			setDx(0);
-			setLocation(getX() + getDx(), getY() + getDy());
+			setLocation(getX() + dx, getY() + dy);
 		}
 		
 		public void moveDown()
 		{
 			setDy(3);
 			setDx(0);
-			setLocation(getX() + getDx(), getY() + getDy());
+			setLocation(getX() + dx, getY() + dy);
 		}
 		
 		public void moveLeft()
 		{
 			setDy(0);
 			setDx(-3);
-			setLocation(getX() + getDx(), getY() + getDy());
+			setLocation(getX() + dx, getY() + dy);
 		}
 		
 		public void moveRight()
 		{
 			setDy(0);
 			setDx(3);
-			setLocation(getX() + getDx(), getY() + getDy());
+			setLocation(getX() + dx, getY() + dy);
 		}
 		
 		public double findAngle(JComponent man)
@@ -200,7 +230,12 @@ public class RedGhost extends JComponent
 			}
 			else
 			{
-				angle = 90;
+				if(this.getY() < man.getY())
+				angle = 270;
+				else
+				{
+					angle = 90;
+				}
 			}
 			return angle;
 		}

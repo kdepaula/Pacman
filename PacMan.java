@@ -14,6 +14,7 @@ public class PacMan extends JComponent
 		private int dx;
 		private int dy;
 		private int diameter = 30;
+		private Rectangle2D.Double rect;
 		
 		/**
 		 * Creates the ImageIcon of Pacman, adds it to a JLabel
@@ -21,13 +22,19 @@ public class PacMan extends JComponent
 		 */
 		public PacMan()
 		{
-			ImageIcon imageIcon = new ImageIcon("images/pacman closed.png");
+			ImageIcon imageIcon = new ImageIcon("images/pacman open.png");
 			Image image = imageIcon.getImage(); 
 			Image newimg = image.getScaledInstance(diameter, diameter,  java.awt.Image.SCALE_SMOOTH);
 			imageIcon = new ImageIcon(newimg);
 			JLabel imageLabel = new JLabel(imageIcon);
 			imageLabel.setBounds(0, 0, diameter, diameter);
 			add(imageLabel);
+			rect = new Rectangle2D.Double(0, 0, diameter, diameter);
+		}
+		
+		public Rectangle2D.Double getRect()
+		{
+			return rect;
 		}
 		
 		/**

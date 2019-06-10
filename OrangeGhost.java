@@ -7,7 +7,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
-public class BlueGhost extends JComponent
+public class OrangeGhost extends JComponent
 {
 
 		private int dx;
@@ -17,9 +17,9 @@ public class BlueGhost extends JComponent
 		private char lastDirectionTurned = 'd';
 		private int relativeQuadrant = 1;
 		
-		public BlueGhost()
+		public OrangeGhost()
 		{
-			ImageIcon imageIcon = new ImageIcon("images/Blue Ghost Left.png");
+			ImageIcon imageIcon = new ImageIcon("images/Orange Ghost Left.png");
 			Image image = imageIcon.getImage(); 
 			Image newimg = image.getScaledInstance(diameter, diameter,  java.awt.Image.SCALE_SMOOTH);
 			imageIcon = new ImageIcon(newimg);
@@ -100,7 +100,7 @@ public class BlueGhost extends JComponent
 		public void setLeft()
 		{
 			removeAll();
-			ImageIcon imageIcon = new ImageIcon("images/Blue Ghost Left.png");
+			ImageIcon imageIcon = new ImageIcon("images/Orange Ghost Left.png");
 			Image image = imageIcon.getImage(); 
 			Image newimg = image.getScaledInstance(getDiameter(), getDiameter(),  java.awt.Image.SCALE_SMOOTH);
 			imageIcon = new ImageIcon(newimg);
@@ -112,7 +112,7 @@ public class BlueGhost extends JComponent
 		public void setLeftAlt()
 		{
 			removeAll();
-			ImageIcon imageIcon = new ImageIcon("images/Blue Ghost Left Alt.png");
+			ImageIcon imageIcon = new ImageIcon("images/Orange Ghost Left Alt.png");
 			Image image = imageIcon.getImage(); 
 			Image newimg = image.getScaledInstance(getDiameter(), getDiameter(),  java.awt.Image.SCALE_SMOOTH);
 			imageIcon = new ImageIcon(newimg);
@@ -124,7 +124,7 @@ public class BlueGhost extends JComponent
 		public void setRightAlt()
 		{
 			removeAll();
-			ImageIcon imageIcon = new ImageIcon("images/Blue Ghost Right Alt.png");
+			ImageIcon imageIcon = new ImageIcon("images/Orange Ghost Right Alt.png");
 			Image image = imageIcon.getImage(); 
 			Image newimg = image.getScaledInstance(getDiameter(), getDiameter(),  java.awt.Image.SCALE_SMOOTH);
 			imageIcon = new ImageIcon(newimg);
@@ -136,7 +136,7 @@ public class BlueGhost extends JComponent
 		public void setRight()
 		{
 			removeAll();
-			ImageIcon imageIcon = new ImageIcon("images/Blue Ghost Right.png");
+			ImageIcon imageIcon = new ImageIcon("images/Orange Ghost Right.png");
 			Image image = imageIcon.getImage(); 
 			Image newimg = image.getScaledInstance(getDiameter(), getDiameter(),  java.awt.Image.SCALE_SMOOTH);
 			imageIcon = new ImageIcon(newimg);
@@ -148,7 +148,7 @@ public class BlueGhost extends JComponent
 		public void setScared()
 		{
 			removeAll();
-			ImageIcon imageIcon = new ImageIcon("images/Scablue Ghost.png");
+			ImageIcon imageIcon = new ImageIcon("images/Scared Ghost.png");
 			Image image = imageIcon.getImage(); 
 			Image newimg = image.getScaledInstance(getDiameter(), getDiameter(),  java.awt.Image.SCALE_SMOOTH);
 			imageIcon = new ImageIcon(newimg);
@@ -160,8 +160,8 @@ public class BlueGhost extends JComponent
 		public void setScaredAlt()
 		{
 			removeAll();
-			ImageIcon imageIcon = new ImageIcon("images/Scablue Ghost Alt.png");
-			Image image = imageIcon.getImage(); 
+			ImageIcon imageIcon = new ImageIcon("images/Scared Ghost Alt.png");
+			Image image = imageIcon.getImage();
 			Image newimg = image.getScaledInstance(getDiameter(), getDiameter(),  java.awt.Image.SCALE_SMOOTH);
 			imageIcon = new ImageIcon(newimg);
 			JLabel imageLabel = new JLabel(imageIcon);
