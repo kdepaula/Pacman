@@ -118,11 +118,19 @@ public class PacMan extends JComponent
 		}
 		public boolean canGoLeft(int[][] map)
 		{
-			if(map[(getY()/30)][((getX()-2)/30)] == 1 || map[(getY()-2)/30 + 1][((getX()-2)/30)] == 1) {setDx(0); return false;}
+			if(getX() < 3 && getDx() <0)
+			{
+				setLocation(540, getY());
+			}
+			else if(map[(getY()/30)][((getX()-2)/30)] == 1 || map[(getY()-2)/30 + 1][((getX()-2)/30)] == 1) {setDx(0); return false;}
 			return true;
 		}
 		public boolean canGoRight(int[][] map)
 		{
+			if(getX() > 537 && getDx() >0)
+			{
+				setLocation(3, getY());
+			}
 			if(map[(getY()/30)][((getX()+2)/30)+1] == 1 || map[(getY()-2)/30 + 1][((getX()+2)/30) + 1] == 1) {setDx(0); return false;}
 			return true;
 		}
@@ -219,4 +227,5 @@ public class PacMan extends JComponent
 				imageLabel.setBounds(0, 0, getDiameter(), getDiameter());
 				add(imageLabel);
 		}
+
 }
