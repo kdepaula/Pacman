@@ -148,7 +148,7 @@ public class PinkGhost extends JComponent
 		public void setScared()
 		{
 			removeAll();
-			ImageIcon imageIcon = new ImageIcon("images/ScaPink Ghost.png");
+			ImageIcon imageIcon = new ImageIcon("images/Scared Ghost.png");
 			Image image = imageIcon.getImage(); 
 			Image newimg = image.getScaledInstance(getDiameter(), getDiameter(),  java.awt.Image.SCALE_SMOOTH);
 			imageIcon = new ImageIcon(newimg);
