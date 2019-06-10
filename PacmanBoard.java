@@ -16,10 +16,15 @@ public class PacmanBoard extends JFrame implements ActionListener
 {
 	PacMan man = new PacMan();
 	BlueGhost blueGhost = new BlueGhost();
-	RedGhost red = new RedGhost();
 	Sound sound = new Sound();
 
 	private int counter = 0;
+	private ArrayList<Wall> arr;
+	private ArrayList<Pellet> arr2;
+	private ArrayList<PowerPellet> arr3;
+	private int score1;
+	JLabel score;
+	
 	
 	
 	/**
@@ -59,13 +64,15 @@ public class PacmanBoard extends JFrame implements ActionListener
 	};
 	public PacmanBoard()
 	{
+		arr = new ArrayList<Wall>();
+		arr2 = new ArrayList<Pellet>();
+		arr3 = new ArrayList<PowerPellet>();
 		sound.playSound();
 		setBounds(200, 50, 585, 695);
 		setLayout(null);
 		getContentPane().setBackground(Color.BLACK);
 		man.setBounds(270, 360, man.getDiameter() + 2, man.getDiameter() + 2);
-		red.setBounds(270, 360, red.getDiameter() + 2, red.getDiameter() + 2);
-		red.setVisible(true);
+		blueGhost.setBounds(0, 0, blueGhost.getWidth(), blueGhost.getHeight());
 		this.add(man);
 		this.add(blueGhost);
 		man.setDx(0);
@@ -73,7 +80,9 @@ public class PacmanBoard extends JFrame implements ActionListener
 		setResizable(false);
 		int xVal = 0;
 		int yVal = 0;
-			
+		score = new JLabel("Score:" + score1);
+		score.setBounds(0, 0, 100, 20);
+		add(score);	
 		this.addKeyListener(new KeyListener()
 		{
 
@@ -113,7 +122,6 @@ public class PacmanBoard extends JFrame implements ActionListener
 			
 			Timer t1 = new Timer(1000/60, this);
 			t1.start();
-			
 			for(int i = 0; i < map.length; i++)
 			{
 				xVal = 0;
@@ -123,26 +131,27 @@ public class PacmanBoard extends JFrame implements ActionListener
 					{
 						Wall wall = new Wall(xVal, yVal);
 						add(wall);
+						arr.add(wall);
 					}
 					if(map[i][j] == 0)
 					{
 						Pellet pellet = new Pellet(xVal, yVal);
 						add(pellet);
+						arr2.add(pellet);
 					}
 					if(map[i][j] == 2)
 					{
 						PowerPellet power = new PowerPellet(xVal,yVal);
 						add(power);
+						arr3.add(power);
 					}
 					xVal += 30;
 				}
 				yVal += 30;
 			}
-			
 			this.setVisible(true);
 			this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
-		
 		
 		public void actionPerformed(ActionEvent e) 
 		{
@@ -154,21 +163,46 @@ public class PacmanBoard extends JFrame implements ActionListener
 			}
 			else if (counter > 8)
 			{
-				man.closeMouth();
+				closeMouth();
 			}
 			else
 			{
 				setCurrentImage();
 				
-				if(man.getDy() == -3) {man.setUp();}
-				if(man.getDy() == 3) {man.setDown();}
-				if(man.getDx() == -3) {man.setLeft();}
-				if(man.getDx() == 3) {man.setRight();}
+				if(man.getDy() == -3) {setUp();}
+				if(man.getDy() == 3) {setDown();}
+				if(man.getDx() == -3) {setLeft();}
+				if(man.getDx() == 3) {setRight();}
 				
 			}
-			
-			red.update();
-			fixBounds();
+			blueGhost.update();
+			this.fixBounds();
+			for(Pellet a : arr2)
+			{
+				if(man.getX() == a.getX() && man.getY() == a.getY())
+				{
+					if(a.isVisible())
+					{
+						score1++;
+						score.setText("Score: " + score1);
+					}
+					a.setVisible(false);
+					
+				}
+			}
+			for(PowerPellet b : arr3)
+			{
+				if(man.getX() == b.getX() && man.getY() == b.getY())
+				{
+					if(b.isVisible())
+					{
+						score1 += 5;
+						score.setText("Score: " + score1);
+					}
+					b.setVisible(false);
+					
+				}
+			}
 		}
 		
 		/**
@@ -177,9 +211,119 @@ public class PacmanBoard extends JFrame implements ActionListener
 		 */
 		public void fixBounds()
 		{
-
+			if(man.getX() < 0)
+			{
+				man.setLocation(0, man.getY());
+			}
+			if(man.getX() > (this.getWidth() - man.getWidth()))
+			{
+				man.setLocation(this.getWidth() - man.getWidth(), man.getY());
+			}
+			if(man.getY() < 0)
+			{
+				man.setLocation(man.getX(), 0);
+			}
+			if(man.getY() > this.getHeight() - man.getHeight())
+			{
+				man.setLocation(man.getX(), this.getHeight() - man.getHeight());
+			}
+			if(man.getX() == 0 && (300 < man.getY() << 320))
+			{
+				man.setLocation(585, man.getY());
+			}
 		}
 		
+		public boolean isTouchingWall()
+		{
+			for(Wall w: arr)
+			{
+				if(man.getRect().intersects(w.getXValue(), w.getYValue(), w.getThickness(), w.getThickness()));
+				{
+
+					System.out.println("touching a wall");
+					return true;
+				}
+			}
+			System.out.println("OK");
+			return false;
+		}
+		
+		
+		
+		/**
+		 * sets the image of pacman to the left
+		 */
+		public void setLeft()
+		{
+			man.removeAll();
+			ImageIcon imageIcon = new ImageIcon("images/pacman open left.png");
+			Image image = imageIcon.getImage(); 
+			Image newimg = image.getScaledInstance(man.getDiameter(), man.getDiameter(),  java.awt.Image.SCALE_SMOOTH);
+			imageIcon = new ImageIcon(newimg);
+			JLabel imageLabel = new JLabel(imageIcon);
+			imageLabel.setBounds(0, 0, man.getDiameter(), man.getDiameter());
+			man.add(imageLabel);
+		}
+		
+		/**
+		 * sets the image of pacman to the right
+		 */
+		public void setRight()
+		{
+			man.removeAll();
+			ImageIcon imageIcon = new ImageIcon("images/pacman open.png");
+			Image image = imageIcon.getImage(); 
+			Image newimg = image.getScaledInstance(man.getDiameter(), man.getDiameter(),  java.awt.Image.SCALE_SMOOTH);
+			imageIcon = new ImageIcon(newimg);
+			JLabel imageLabel = new JLabel(imageIcon);
+			imageLabel.setBounds(0, 0, man.getDiameter(), man.getDiameter());
+			man.add(imageLabel);
+		}
+		
+		/**
+		 * sets the image of pacman up
+		 */
+		public void setUp()
+		{
+			man.removeAll();
+			ImageIcon imageIcon = new ImageIcon("images/pacman open up.png");
+			Image image = imageIcon.getImage(); 
+			Image newimg = image.getScaledInstance(man.getDiameter(), man.getDiameter(),  java.awt.Image.SCALE_SMOOTH);
+			imageIcon = new ImageIcon(newimg);
+			JLabel imageLabel = new JLabel(imageIcon);
+			imageLabel.setBounds(0, 0, man.getDiameter(), man.getDiameter());
+			man.add(imageLabel);
+		}
+		
+		/**
+		 * sets the image of pacman down
+		 */
+		public void setDown()
+		{
+			man.removeAll();
+			ImageIcon imageIcon = new ImageIcon("images/pacman open down.png");
+			Image image = imageIcon.getImage(); 
+			Image newimg = image.getScaledInstance(man.getDiameter(), man.getDiameter(),  java.awt.Image.SCALE_SMOOTH);
+			imageIcon = new ImageIcon(newimg);
+			JLabel imageLabel = new JLabel(imageIcon);
+			imageLabel.setBounds(0, 0, man.getDiameter(), man.getDiameter());
+			man.add(imageLabel);
+		}
+		
+		/**
+		 * sets the image of pacman to the closed mouth
+		 */
+		public void closeMouth()
+		{
+				man.removeAll();
+				ImageIcon imageIcon = new ImageIcon("images/pacman closed.png");
+				Image image = imageIcon.getImage(); 
+				Image newimg = image.getScaledInstance(man.getDiameter(), man.getDiameter(),  java.awt.Image.SCALE_SMOOTH);
+				imageIcon = new ImageIcon(newimg);
+				JLabel imageLabel = new JLabel(imageIcon);
+				imageLabel.setBounds(0, 0, man.getDiameter(), man.getDiameter());
+				man.add(imageLabel);
+		}
 		
 		/**
 		 * sets the pacman to the appropriate image based on
@@ -189,28 +333,32 @@ public class PacmanBoard extends JFrame implements ActionListener
 		{
 			if(currentImage == 'r')
 				{
-					man.setRight();
+					setRight();
 				}
 				
 				if(currentImage == 'l')
 				{
-					man.setLeft();
+					setLeft();
 				}
 				
 				if(currentImage == 'u')
 				{
-					man.setUp();
+					setUp();
 				}
 				
 				if(currentImage == 'd')
 				{
-					man.setDown();
+					setDown();
 				}
 		}
+	
+	public int[][] getMap()
+	{
+		return map;
+	}
 	
 	public static void main (String[] args)
 	{
 		PacmanBoard board = new PacmanBoard();
 	}
-	
 }
