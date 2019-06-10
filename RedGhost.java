@@ -75,7 +75,7 @@ public class RedGhost extends JComponent
 		}
 		public boolean canGoLeft(int[][] map)
 		{
-			if(getX() < 3 && getDx() <0)
+			if(getX() < 3 && getDx() < 0)
 			{
 				setLocation(540, getY());
 			}
@@ -84,7 +84,7 @@ public class RedGhost extends JComponent
 		}
 		public boolean canGoRight(int[][] map)
 		{
-			if(getX() > 537 && getDx() >0)
+			if(getX() > 537 && getDx() > 0)
 			{
 				setLocation(3, getY());
 			}
