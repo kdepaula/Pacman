@@ -89,10 +89,10 @@ public class PacmanBoard extends JFrame implements ActionListener
 		setLayout(null);
 		getContentPane().setBackground(Color.BLACK);
 		man.setBounds(270, 480, man.getDiameter() + 2, man.getDiameter() + 2);
-		red.setBounds(270, 240, red.getDiameter(), red.getDiameter());
-		blue.setBounds(240,300, blue.getDiameter(), blue.getDiameter());
-		orange.setBounds(300,300, orange.getDiameter(), orange.getDiameter());
-		pink.setBounds(270,300, pink.getDiameter(), pink.getDiameter());
+		red.setBounds(270, 240, red.getDiameter() + 2, red.getDiameter() + 2);
+		blue.setBounds(240,300, blue.getDiameter() + 2, blue.getDiameter() + 2);
+		orange.setBounds(300,300, orange.getDiameter() + 2, orange.getDiameter() + 2);
+		pink.setBounds(270,300, pink.getDiameter() + 2, pink.getDiameter() + 2);
 		ImageIcon imageIcon = new ImageIcon("images/pacman open.png");
 		Image image = imageIcon.getImage(); 
 		Image newimg = image.getScaledInstance(20, 20,  java.awt.Image.SCALE_SMOOTH);
@@ -243,15 +243,15 @@ public class PacmanBoard extends JFrame implements ActionListener
 			}
 			else if(!endAll)
 			{	largeCounter++;
-				if(largeCounter == 250)
+				if(largeCounter == 150)
 				{
 					pink.setLocation(270, 240);
 				}
-				if(largeCounter == 500)
+				if(largeCounter == 300)
 				{
 					blue.setLocation(270, 240);
 				}
-				if(largeCounter == 1000)
+				if(largeCounter == 450)
 				{
 					orange.setLocation(270, 240);
 				}
@@ -377,14 +377,12 @@ public class PacmanBoard extends JFrame implements ActionListener
 				else if(red.isToTheLeft(man))
 				{
 					red.setLeft();
-					red.setVisible(true);
 					frightened = false;
 					hitRed = false;
 				}
 				else if(red.isToTheRight(man))
 				{
 					red.setRight();
-					red.setVisible(true);
 					frightened = false;
 					hitRed = false;
 				}
@@ -397,10 +395,12 @@ public class PacmanBoard extends JFrame implements ActionListener
 				else if(blue.isToTheLeft(man))
 				{
 					blue.setLeft();
+					hitBlue = false;
 				}
 				else if(blue.isToTheRight(man))
 				{
 					blue.setRight();
+					hitBlue = false;
 				}
 				if(frightened && scaredCounter < 300 && !hitPink)
 				{
@@ -411,10 +411,12 @@ public class PacmanBoard extends JFrame implements ActionListener
 				else if(pink.isToTheLeft(man))
 				{
 					pink.setLeft();
+					hitPink = false;
 				}
 				else if(pink.isToTheRight(man))
 				{
 					pink.setRight();
+					hitPink = false;
 				}
 				if(frightened && scaredCounter < 300 && !hitOrange)
 				{
@@ -425,10 +427,12 @@ public class PacmanBoard extends JFrame implements ActionListener
 				else if(orange.isToTheLeft(man))
 				{
 					orange.setLeft();
+					hitOrange = false;
 				}
 				else if(orange.isToTheRight(man))
 				{
 					orange.setRight();
+					hitOrange = false;
 				}
 				
 				setCurrentImage();
@@ -709,13 +713,13 @@ public class PacmanBoard extends JFrame implements ActionListener
 		
 		public void updateGhostDirectionPink()
 		{
-			if(pink.canGoUp(map) && pink.findAngle(man) == 90)
-			{
-				pink.moveUp();
-			}
-			else if(pink.canGoDown(map) && pink.findAngle(man) == 270)
+			if(pink.canGoDown(map) && pink.findAngle(man) == 270)
 			{
 				pink.moveDown();
+			}
+			else if(pink.canGoUp(map) && pink.findAngle(man) == 90)
+			{
+				pink.moveUp();
 			}
 			else if(pink.canGoLeft(map) && pink.findAngle(man) == 180)
 			{
@@ -725,13 +729,13 @@ public class PacmanBoard extends JFrame implements ActionListener
 			{
 				pink.moveRight();
 			}
-			if(pink.canGoUp(map) && (pink.getRelativeQuadrant() == 1 || pink.getRelativeQuadrant() == 2))
-			{
-				pink.moveUp();
-			}
 			else if(pink.canGoDown(map) && (pink.getRelativeQuadrant() == 3 || pink.getRelativeQuadrant() == 4))
 			{
 				pink.moveDown();
+			}
+			if(pink.canGoUp(map) && (pink.getRelativeQuadrant() == 1 || pink.getRelativeQuadrant() == 2))
+			{
+				pink.moveUp();
 			}
 			else if(pink.canGoLeft(map) && (pink.getRelativeQuadrant() == 1 || pink.getRelativeQuadrant() == 3))
 			{
@@ -745,7 +749,12 @@ public class PacmanBoard extends JFrame implements ActionListener
 		
 		public void updateGhostDirectionOrange()
 		{
-			if(orange.canGoUp(map) && orange.findAngle(man) == 90)
+
+			if(orange.canGoLeft(map) && orange.findAngle(man) == 180)
+			{
+				orange.moveLeft();
+			}
+			else if(orange.canGoUp(map) && orange.findAngle(man) == 90)
 			{
 				orange.moveUp();
 			}
@@ -753,13 +762,13 @@ public class PacmanBoard extends JFrame implements ActionListener
 			{
 				orange.moveDown();
 			}
-			else if(orange.canGoLeft(map) && orange.findAngle(man) == 180)
-			{
-				orange.moveLeft();
-			}
 			else if(orange.canGoRight(map) && (orange.findAngle(man) == 0 || orange.findAngle(man) == 360))
 			{
 				orange.moveRight();
+			}
+			else if(orange.canGoLeft(map) && (orange.getRelativeQuadrant() == 1 || orange.getRelativeQuadrant() == 3))
+			{
+				orange.moveLeft();
 			}
 			if(orange.canGoUp(map) && (orange.getRelativeQuadrant() == 1 || orange.getRelativeQuadrant() == 2))
 			{
@@ -768,10 +777,6 @@ public class PacmanBoard extends JFrame implements ActionListener
 			else if(orange.canGoDown(map) && (orange.getRelativeQuadrant() == 3 || orange.getRelativeQuadrant() == 4))
 			{
 				orange.moveDown();
-			}
-			else if(orange.canGoLeft(map) && (orange.getRelativeQuadrant() == 1 || orange.getRelativeQuadrant() == 3))
-			{
-				orange.moveLeft();
 			}
 			else if(orange.canGoRight(map) && (orange.getRelativeQuadrant() == 2 || orange.getRelativeQuadrant() == 4))
 			{
@@ -817,7 +822,11 @@ public class PacmanBoard extends JFrame implements ActionListener
 		
 		public void updateGhostDirectionBlue()
 		{
-			if(blue.canGoUp(map) && blue.findAngle(man) == 90)
+			if(blue.canGoRight(map) && (blue.findAngle(man) == 0 || blue.findAngle(man) == 360))
+			{
+				blue.moveRight();
+			}
+			else if(blue.canGoUp(map) && blue.findAngle(man) == 90)
 			{
 				blue.moveUp();
 			}
@@ -829,7 +838,7 @@ public class PacmanBoard extends JFrame implements ActionListener
 			{
 				blue.moveLeft();
 			}
-			else if(blue.canGoRight(map) && (blue.findAngle(man) == 0 || blue.findAngle(man) == 360))
+			else if(blue.canGoRight(map) && (blue.getRelativeQuadrant() == 2 || blue.getRelativeQuadrant() == 4))
 			{
 				blue.moveRight();
 			}
