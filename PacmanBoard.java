@@ -94,7 +94,7 @@ public class PacmanBoard extends JFrame implements ActionListener
 		arr = new ArrayList<Wall>();
 		arr2 = new ArrayList<Pellet>();
 		arr3 = new ArrayList<PowerPellet>();
-		setBounds(200, 50, 578, 750);
+		setBounds(200, 0, 578, 740);
 		setLayout(null);
 		getContentPane().setBackground(Color.BLACK);
 		man.setBounds(270, 480, man.getDiameter() + 2, man.getDiameter() + 2);
@@ -107,21 +107,21 @@ public class PacmanBoard extends JFrame implements ActionListener
 		Image newimg = image.getScaledInstance(20, 20,  java.awt.Image.SCALE_SMOOTH);
 		imageIcon = new ImageIcon(newimg);
 		imageLabel = new JLabel(imageIcon);
-		imageLabel.setBounds(10, 680, 20, 20);
+		imageLabel.setBounds(10, 670, 20, 20);
 		add(imageLabel);
 		ImageIcon imageIcon1 = new ImageIcon("images/pacman open.png");
 		Image image1 = imageIcon1.getImage(); 
 		Image newimg1 = image1.getScaledInstance(20, 20,  java.awt.Image.SCALE_SMOOTH);
 		imageIcon1 = new ImageIcon(newimg1);
 		imageLabel1 = new JLabel(imageIcon1);
-		imageLabel1.setBounds(40, 680, 20, 20);
+		imageLabel1.setBounds(40, 670, 20, 20);
 		add(imageLabel1);
 		ImageIcon imageIcon11 = new ImageIcon("images/pacman open.png");
 		Image image11 = imageIcon11.getImage(); 
 		Image newimg11 = image11.getScaledInstance(20, 20,  java.awt.Image.SCALE_SMOOTH);
 		imageIcon11 = new ImageIcon(newimg11);
 		imageLabel11 = new JLabel(imageIcon11);
-		imageLabel11.setBounds(70, 680, 20, 20);
+		imageLabel11.setBounds(70, 670, 20, 20);
 		add(imageLabel11);
 		ImageIcon imageIcon2 = new ImageIcon("images/strawberry.png");
 		Image image2 = imageIcon2.getImage(); 
@@ -335,7 +335,7 @@ public class PacmanBoard extends JFrame implements ActionListener
 			else if (counter > 6)
 			{
 				man.closeMouth();
-				if(frightened && !hitRed)
+				if(frightened && !hitRed && scaredCounter < 300)
 				{
 					red.setScaredAlt();
 				}
@@ -343,13 +343,15 @@ public class PacmanBoard extends JFrame implements ActionListener
 				{
 					red.setLeftAlt("Red");
 					red.setVisible(true);
+					hitRed = false;
 				}
 				else if(red.isToTheRight(man))
 				{
 					red.setRight("Red");
 					red.setVisible(true);
+					hitRed = false;
 				}
-				if(frightened && !hitBlue)
+				if(frightened && !hitBlue&& scaredCounter < 300)
 				{
 					blue.setScaredAlt();
 				}
@@ -357,13 +359,15 @@ public class PacmanBoard extends JFrame implements ActionListener
 				{
 					blue.setLeftAlt("Blue");
 					blue.setVisible(true);
+					hitBlue = false;
 				}
 				else if(blue.isToTheRight(man))
 				{
 					blue.setRightAlt("Blue");
 					blue.setVisible(true);
+					hitBlue = false;
 				}
-				if(frightened && !hitPink)
+				if(frightened && !hitPink && scaredCounter < 300)
 				{
 					pink.setScaredAlt();
 				}
@@ -371,13 +375,15 @@ public class PacmanBoard extends JFrame implements ActionListener
 				{
 					pink.setLeftAlt("Pink");
 					pink.setVisible(true);
+					hitPink = false;
 				}
 				else if(pink.isToTheRight(man))
 				{
 					pink.setRightAlt("Pink");
 					pink.setVisible(true);
+					hitPink = false;
 				}
-				if(frightened && !hitOrange)
+				if(frightened && !hitOrange && scaredCounter < 300)
 				{
 					orange.setScaredAlt();
 				}
@@ -385,11 +391,13 @@ public class PacmanBoard extends JFrame implements ActionListener
 				{
 					orange.setLeftAlt("Orange");
 					orange.setVisible(true);
+					hitOrange = false;
 				}
 				else if(orange.isToTheRight(man))
 				{
 					orange.setRightAlt("Orange");
 					orange.setVisible(true);
+					hitOrange = false;
 				}
 			}
 			else
@@ -921,7 +929,7 @@ public class PacmanBoard extends JFrame implements ActionListener
 					else if(j.canGoUp(map))
 							j.moveUp();
 					else if(j.canGoRight(map))
-							j.moveRight();	
+							j.moveRight();
 				}
 			}
 		}
