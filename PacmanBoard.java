@@ -24,6 +24,13 @@ public class PacmanBoard extends JFrame implements ActionListener
 	static Sound sound = new Sound();
 
 	private boolean frightened = false;
+	/**
+	 * counts number of pellets
+	 */
+	private int counts = 0;
+	/**
+	 * counter and largeCounter time the images of ghosts
+	 */
 	private int counter = 0;
 	private int largeCounter = 0;
 	private int scaredCounter = 0;
@@ -35,10 +42,10 @@ public class PacmanBoard extends JFrame implements ActionListener
 	private JLabel imageLabel;
 	private JLabel imageLabel1;
 	private JLabel imageLabel11;
+	private JLabel imageLabel2;
 	private JLabel gameOver = new JLabel("GAME OVER");
 	private JLabel win = new JLabel("YOU WON");
 	private boolean endAll = false;
-	
 	
 	/**
 	 * keeps track of the most recently pressed key
@@ -81,7 +88,6 @@ public class PacmanBoard extends JFrame implements ActionListener
 		{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
 		{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
 	};
-	private int counts = 0;
 	public PacmanBoard()
 	{
 		arr = new ArrayList<Wall>();
@@ -91,10 +97,10 @@ public class PacmanBoard extends JFrame implements ActionListener
 		setLayout(null);
 		getContentPane().setBackground(Color.BLACK);
 		man.setBounds(270, 480, man.getDiameter() + 2, man.getDiameter() + 2);
-		red.setBounds(270, 240, red.getDiameter(), red.getDiameter());
-		blue.setBounds(240,300, blue.getDiameter(), blue.getDiameter());
-		orange.setBounds(300,300, orange.getDiameter(), orange.getDiameter());
-		pink.setBounds(270,300, pink.getDiameter(), pink.getDiameter());
+		red.setBounds(270, 240, red.getDiameter() + 2, red.getDiameter() + 2);
+		blue.setBounds(240,300, blue.getDiameter() + 2, blue.getDiameter() + 2);
+		orange.setBounds(300,300, orange.getDiameter() + 2, orange.getDiameter() + 2);
+		pink.setBounds(270,300, pink.getDiameter() + 2, pink.getDiameter() + 2);
 		ImageIcon imageIcon = new ImageIcon("images/pacman open.png");
 		Image image = imageIcon.getImage(); 
 		Image newimg = image.getScaledInstance(20, 20,  java.awt.Image.SCALE_SMOOTH);
@@ -116,6 +122,12 @@ public class PacmanBoard extends JFrame implements ActionListener
 		imageLabel11 = new JLabel(imageIcon11);
 		imageLabel11.setBounds(70, 680, 20, 20);
 		add(imageLabel11);
+		ImageIcon imageIcon2 = new ImageIcon("images/strawberry.png");
+		Image image2 = imageIcon2.getImage(); 
+		Image newimg2 = image2.getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH);
+		imageIcon2 = new ImageIcon(newimg2);
+		imageLabel2 = new JLabel(imageIcon2);
+		imageLabel2.setBounds(270, 365, 20, 20);
 		add(gameOver);
 		gameOver.setVisible(false);
 		gameOver.setForeground (Color.red);
@@ -250,17 +262,18 @@ public class PacmanBoard extends JFrame implements ActionListener
 			}
 			else if(!endAll)
 			{	largeCounter++;
-				if(largeCounter == 250)
+				if(largeCounter == 150)
 				{
 					pink.setLocation(270, 240);
 				}
-				if(largeCounter == 500)
+				if(largeCounter == 300)
 				{
 					blue.setLocation(270, 240);
 				}
-				if(largeCounter == 1000)
+				if(largeCounter == 450)
 				{
 					orange.setLocation(270, 240);
+					add(imageLabel2);
 				}
 				notMovingRed();
 				notMovingOrange();
@@ -284,7 +297,7 @@ public class PacmanBoard extends JFrame implements ActionListener
 			}
 			for(PowerPellet b : arr3)
 			{
-				if(man.getX() == b.getX() && man.getY() == b.getY())
+				if(man.getX() == b.getX() && man.getY() == b.getY() && b.isVisible())
 				{
 					frightened = true;
 					if(b.isVisible())
@@ -297,21 +310,21 @@ public class PacmanBoard extends JFrame implements ActionListener
 					scaredCounter = 0;
 				}
 			}
-				if(counts == 153)
-				{
-					man.setDy(0);
-					man.setDx(0);
-					red.setDx(0);
-					red.setDy(0);
-					man.setLocation(270, 480);
-					red.setLocation(270, 240);
-					pink.setLocation(270, 300);
-					orange.setLocation(240, 300);
-					blue.setLocation(300, 300);
-					win.setVisible(true);
-					endAll = true;
-					sound.playSound("intermission");
-				}
+			if(counts == 153)
+			{
+				man.setDy(0);
+				man.setDx(0);
+				red.setDx(0);
+				red.setDy(0);
+				man.setLocation(270, 480);
+				red.setLocation(270, 240);
+				pink.setLocation(270, 300);
+				orange.setLocation(240, 300);
+				blue.setLocation(300, 300);
+				win.setVisible(true);
+				endAll = true;
+				sound.playSound("intermission");
+			}
 			counter++;
 			scaredCounter++;
 			if(counter == 12)
@@ -400,14 +413,12 @@ public class PacmanBoard extends JFrame implements ActionListener
 				else if(red.isToTheLeft(man))
 				{
 					red.setLeft();
-					red.setVisible(true);
 					frightened = false;
 					hitRed = false;
 				}
 				else if(red.isToTheRight(man))
 				{
 					red.setRight();
-					red.setVisible(true);
 					frightened = false;
 					hitRed = false;
 				}
@@ -420,10 +431,12 @@ public class PacmanBoard extends JFrame implements ActionListener
 				else if(blue.isToTheLeft(man))
 				{
 					blue.setLeft();
+					hitBlue = false;
 				}
 				else if(blue.isToTheRight(man))
 				{
 					blue.setRight();
+					hitBlue = false;
 				}
 				if(frightened && scaredCounter < 300 && !hitPink)
 				{
@@ -434,10 +447,12 @@ public class PacmanBoard extends JFrame implements ActionListener
 				else if(pink.isToTheLeft(man))
 				{
 					pink.setLeft();
+					hitPink = false;
 				}
 				else if(pink.isToTheRight(man))
 				{
 					pink.setRight();
+					hitPink = false;
 				}
 				if(frightened && scaredCounter < 300 && !hitOrange)
 				{
@@ -448,10 +463,12 @@ public class PacmanBoard extends JFrame implements ActionListener
 				else if(orange.isToTheLeft(man))
 				{
 					orange.setLeft();
+					hitOrange = false;
 				}
 				else if(orange.isToTheRight(man))
 				{
 					orange.setRight();
+					hitOrange = false;
 				}
 				
 				setCurrentImage();
@@ -461,6 +478,7 @@ public class PacmanBoard extends JFrame implements ActionListener
 				if(man.getDx() == 3) {man.setRight();}
 			}
 		}	
+			fruitVisibility(imageLabel2);
 		}
 		
 		
@@ -732,13 +750,13 @@ public class PacmanBoard extends JFrame implements ActionListener
 		
 		public void updateGhostDirectionPink()
 		{
-			if(pink.canGoUp(map) && pink.findAngle(man) == 90)
-			{
-				pink.moveUp();
-			}
-			else if(pink.canGoDown(map) && pink.findAngle(man) == 270)
+			if(pink.canGoDown(map) && pink.findAngle(man) == 270)
 			{
 				pink.moveDown();
+			}
+			else if(pink.canGoUp(map) && pink.findAngle(man) == 90)
+			{
+				pink.moveUp();
 			}
 			else if(pink.canGoLeft(map) && pink.findAngle(man) == 180)
 			{
@@ -748,13 +766,13 @@ public class PacmanBoard extends JFrame implements ActionListener
 			{
 				pink.moveRight();
 			}
-			if(pink.canGoUp(map) && (pink.getRelativeQuadrant() == 1 || pink.getRelativeQuadrant() == 2))
-			{
-				pink.moveUp();
-			}
 			else if(pink.canGoDown(map) && (pink.getRelativeQuadrant() == 3 || pink.getRelativeQuadrant() == 4))
 			{
 				pink.moveDown();
+			}
+			if(pink.canGoUp(map) && (pink.getRelativeQuadrant() == 1 || pink.getRelativeQuadrant() == 2))
+			{
+				pink.moveUp();
 			}
 			else if(pink.canGoLeft(map) && (pink.getRelativeQuadrant() == 1 || pink.getRelativeQuadrant() == 3))
 			{
@@ -768,7 +786,12 @@ public class PacmanBoard extends JFrame implements ActionListener
 		
 		public void updateGhostDirectionOrange()
 		{
-			if(orange.canGoUp(map) && orange.findAngle(man) == 90)
+
+			if(orange.canGoLeft(map) && orange.findAngle(man) == 180)
+			{
+				orange.moveLeft();
+			}
+			else if(orange.canGoUp(map) && orange.findAngle(man) == 90)
 			{
 				orange.moveUp();
 			}
@@ -776,13 +799,13 @@ public class PacmanBoard extends JFrame implements ActionListener
 			{
 				orange.moveDown();
 			}
-			else if(orange.canGoLeft(map) && orange.findAngle(man) == 180)
-			{
-				orange.moveLeft();
-			}
 			else if(orange.canGoRight(map) && (orange.findAngle(man) == 0 || orange.findAngle(man) == 360))
 			{
 				orange.moveRight();
+			}
+			else if(orange.canGoLeft(map) && (orange.getRelativeQuadrant() == 1 || orange.getRelativeQuadrant() == 3))
+			{
+				orange.moveLeft();
 			}
 			if(orange.canGoUp(map) && (orange.getRelativeQuadrant() == 1 || orange.getRelativeQuadrant() == 2))
 			{
@@ -791,10 +814,6 @@ public class PacmanBoard extends JFrame implements ActionListener
 			else if(orange.canGoDown(map) && (orange.getRelativeQuadrant() == 3 || orange.getRelativeQuadrant() == 4))
 			{
 				orange.moveDown();
-			}
-			else if(orange.canGoLeft(map) && (orange.getRelativeQuadrant() == 1 || orange.getRelativeQuadrant() == 3))
-			{
-				orange.moveLeft();
 			}
 			else if(orange.canGoRight(map) && (orange.getRelativeQuadrant() == 2 || orange.getRelativeQuadrant() == 4))
 			{
@@ -840,7 +859,11 @@ public class PacmanBoard extends JFrame implements ActionListener
 		
 		public void updateGhostDirectionBlue()
 		{
-			if(blue.canGoUp(map) && blue.findAngle(man) == 90)
+			if(blue.canGoRight(map) && (blue.findAngle(man) == 0 || blue.findAngle(man) == 360))
+			{
+				blue.moveRight();
+			}
+			else if(blue.canGoUp(map) && blue.findAngle(man) == 90)
 			{
 				blue.moveUp();
 			}
@@ -852,7 +875,7 @@ public class PacmanBoard extends JFrame implements ActionListener
 			{
 				blue.moveLeft();
 			}
-			else if(blue.canGoRight(map) && (blue.findAngle(man) == 0 || blue.findAngle(man) == 360))
+			else if(blue.canGoRight(map) && (blue.getRelativeQuadrant() == 2 || blue.getRelativeQuadrant() == 4))
 			{
 				blue.moveRight();
 			}
@@ -871,6 +894,16 @@ public class PacmanBoard extends JFrame implements ActionListener
 			else if(blue.canGoRight(map) && (blue.getRelativeQuadrant() == 2 || blue.getRelativeQuadrant() == 4))
 			{
 				blue.moveRight();
+			}
+		}
+		
+		public void fruitVisibility(JLabel j)
+		{
+			if(j.getX() < man.getX() + 10 && j.getX() > man.getX() - 10 && j.getY() < man.getY() + 10 && j.getY() > man.getY() - 10 && j.isVisible())
+			{
+				j.setVisible(false);
+				score1 += 200;
+				sound.playSound("eatfruit");
 			}
 		}
 		
