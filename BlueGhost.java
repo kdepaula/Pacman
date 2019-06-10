@@ -148,7 +148,7 @@ public class BlueGhost extends JComponent
 		public void setScared()
 		{
 			removeAll();
-			ImageIcon imageIcon = new ImageIcon("images/Scablue Ghost.png");
+			ImageIcon imageIcon = new ImageIcon("images/Scared Ghost.png");
 			Image image = imageIcon.getImage(); 
 			Image newimg = image.getScaledInstance(getDiameter(), getDiameter(),  java.awt.Image.SCALE_SMOOTH);
 			imageIcon = new ImageIcon(newimg);
@@ -160,7 +160,7 @@ public class BlueGhost extends JComponent
 		public void setScaredAlt()
 		{
 			removeAll();
-			ImageIcon imageIcon = new ImageIcon("images/Scablue Ghost Alt.png");
+			ImageIcon imageIcon = new ImageIcon("images/Scared Ghost Alt.png");
 			Image image = imageIcon.getImage(); 
 			Image newimg = image.getScaledInstance(getDiameter(), getDiameter(),  java.awt.Image.SCALE_SMOOTH);
 			imageIcon = new ImageIcon(newimg);

@@ -160,7 +160,7 @@ public class PinkGhost extends JComponent
 		public void setScaredAlt()
 		{
 			removeAll();
-			ImageIcon imageIcon = new ImageIcon("images/ScaPink Ghost Alt.png");
+			ImageIcon imageIcon = new ImageIcon("images/Pink Ghost Alt.png");
 			Image image = imageIcon.getImage(); 
 			Image newimg = image.getScaledInstance(getDiameter(), getDiameter(),  java.awt.Image.SCALE_SMOOTH);
 			imageIcon = new ImageIcon(newimg);
