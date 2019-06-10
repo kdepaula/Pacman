@@ -10,6 +10,7 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.Timer;
@@ -17,10 +18,10 @@ import javax.swing.Timer;
 public class PacmanBoard extends JFrame implements ActionListener
 {
 	PacMan man = new PacMan();
-	RedGhost red = new RedGhost();
-	BlueGhost blue = new BlueGhost();
-	OrangeGhost orange = new OrangeGhost();
-	PinkGhost pink = new PinkGhost();
+	RedGhost red = new RedGhost("Red");
+	BlueGhost blue = new BlueGhost("Blue");
+	OrangeGhost orange = new OrangeGhost("Orange");
+	PinkGhost pink = new PinkGhost("Pink");
 	static Sound sound = new Sound();
 
 	private boolean frightened = false;
@@ -57,7 +58,7 @@ public class PacmanBoard extends JFrame implements ActionListener
 	private ArrayList<Wall> arr;
 	private ArrayList<Pellet> arr2;
 	private ArrayList<PowerPellet> arr3;
-	private int score1;
+	private int score1 = 0;
 	JLabel score;
 	
 	/**
@@ -275,10 +276,10 @@ public class PacmanBoard extends JFrame implements ActionListener
 					orange.setLocation(270, 240);
 					add(imageLabel2);
 				}
-				notMovingRed();
-				notMovingOrange();
-				notMovingBlue();
-				notMovingPink();
+				notMoving(red);
+				notMoving(orange);
+				notMoving(blue);
+				notMoving(pink);
 				man.update(currentImage, map);
 				for(Pellet a : arr2)
 				{
@@ -340,12 +341,12 @@ public class PacmanBoard extends JFrame implements ActionListener
 				}
 				else if(red.isToTheLeft(man))
 				{
-					red.setLeftAlt();
+					red.setLeftAlt("Red");
 					red.setVisible(true);
 				}
 				else if(red.isToTheRight(man))
 				{
-					red.setRightAlt();
+					red.setRight("Red");
 					red.setVisible(true);
 				}
 				if(frightened && !hitBlue)
@@ -354,12 +355,12 @@ public class PacmanBoard extends JFrame implements ActionListener
 				}
 				else if(blue.isToTheLeft(man))
 				{
-					blue.setLeftAlt();
+					blue.setLeftAlt("Blue");
 					blue.setVisible(true);
 				}
 				else if(blue.isToTheRight(man))
 				{
-					blue.setRightAlt();
+					blue.setRightAlt("Blue");
 					blue.setVisible(true);
 				}
 				if(frightened && !hitPink)
@@ -368,12 +369,12 @@ public class PacmanBoard extends JFrame implements ActionListener
 				}
 				else if(pink.isToTheLeft(man))
 				{
-					pink.setLeftAlt();
+					pink.setLeftAlt("Pink");
 					pink.setVisible(true);
 				}
 				else if(pink.isToTheRight(man))
 				{
-					pink.setRightAlt();
+					pink.setRightAlt("Pink");
 					pink.setVisible(true);
 				}
 				if(frightened && !hitOrange)
@@ -382,12 +383,12 @@ public class PacmanBoard extends JFrame implements ActionListener
 				}
 				else if(orange.isToTheLeft(man))
 				{
-					orange.setLeftAlt();
+					orange.setLeftAlt("Orange");
 					orange.setVisible(true);
 				}
 				else if(orange.isToTheRight(man))
 				{
-					orange.setRightAlt();
+					orange.setRightAlt("Orange");
 					orange.setVisible(true);
 				}
 			}
@@ -407,67 +408,67 @@ public class PacmanBoard extends JFrame implements ActionListener
 				if(frightened && scaredCounter < 300 && !hitRed)
 				{
 					red.setScared();
-					ghostVisibilityRed();
-					updateScaredGhostRed();
+					ghostHitRed();
+					updateScaredGhost(red);
 				}
 				else if(red.isToTheLeft(man))
 				{
-					red.setLeft();
+					red.setLeft("Red");
 					frightened = false;
 					hitRed = false;
 				}
 				else if(red.isToTheRight(man))
 				{
-					red.setRight();
+					red.setRight("Red");
 					frightened = false;
 					hitRed = false;
 				}
 				if(frightened && scaredCounter < 300 && !hitBlue)
 				{
 					blue.setScared();
-					ghostVisibilityBlue();
-					updateScaredGhostBlue();
+					ghostHitBlue();
+					updateScaredGhost(blue);
 				}
 				else if(blue.isToTheLeft(man))
 				{
-					blue.setLeft();
+					blue.setLeft("Blue");
 					hitBlue = false;
 				}
 				else if(blue.isToTheRight(man))
 				{
-					blue.setRight();
+					blue.setRight("Blue");
 					hitBlue = false;
 				}
 				if(frightened && scaredCounter < 300 && !hitPink)
 				{
 					pink.setScared();
-					ghostVisibilityPink();
-					updateScaredGhostPink();
+					ghostHitPink();
+					updateScaredGhost(pink);
 				}
 				else if(pink.isToTheLeft(man))
 				{
-					pink.setLeft();
+					pink.setLeft("Pink");
 					hitPink = false;
 				}
 				else if(pink.isToTheRight(man))
 				{
-					pink.setRight();
+					pink.setRight("Pink");
 					hitPink = false;
 				}
 				if(frightened && scaredCounter < 300 && !hitOrange)
 				{
 					orange.setScared();
-					ghostVisibilityOrange();
-					updateScaredGhostOrange();
+					ghostHitOrange();
+					updateScaredGhost(orange);
 				}
 				else if(orange.isToTheLeft(man))
 				{
-					orange.setLeft();
+					orange.setLeft("Orange");
 					hitOrange = false;
 				}
 				else if(orange.isToTheRight(man))
 				{
-					orange.setRight();
+					orange.setRight("Orange");
 					hitOrange = false;
 				}
 				
@@ -604,149 +605,80 @@ public class PacmanBoard extends JFrame implements ActionListener
 			}
 		}
 		
-		public void updateScaredGhostPink()
+		
+		public void updateScaredGhost(Ghost j)
 		{
-			if(pink.canGoDown(map) && pink.findAngle(man) == 90)
+			int value = (int) ((Math.random() * 10) + 1);
+			if(value <= 2)
 			{
-				pink.moveDown();
+				if(j.canGoDown(map))
+				j.moveDown();
+				else if(j.canGoUp(map))
+					j.moveUp();
+				else if(j.canGoRight(map))
+					j.moveRight();
 			}
-			else if(pink.canGoUp(map) && pink.findAngle(man) == 270)
+			else if(2 < value && value <= 4)
 			{
-				pink.moveUp();
+				if(j.canGoUp(map))
+					j.moveRight();
+				else if(j.canGoLeft(map))
+						j.moveLeft();
+				else if(j.canGoRight(map))
+						j.moveRight();
 			}
-			else if(pink.canGoRight(map) && pink.findAngle(man) == 180)
+			else if(4 < value && value <= 8)
 			{
-				pink.moveRight();
+				if(j.canGoRight(map))
+					j.moveRight();
+				else if(j.canGoUp(map))
+						j.moveUp();
+				else if(j.canGoLeft(map))
+						j.moveLeft();	
 			}
-			else if(pink.canGoLeft(map) && (pink.findAngle(man) == 0 || pink.findAngle(man) == 360))
+			else if(8 < value && value <= 10)
 			{
-				pink.moveLeft();
+				if(j.canGoLeft(map))
+					j.moveLeft();
+				else if(j.canGoUp(map))
+						j.moveUp();
+				else if(j.canGoRight(map))
+						j.moveRight();	
 			}
-			if(pink.canGoUp(map) && (pink.getRelativeQuadrant() == 3 || pink.getRelativeQuadrant() == 4))
+			if(j.canGoDown(map) && j.findAngle(man) == 90)
 			{
-				pink.moveUp();
+				j.moveDown();
 			}
-			else if(pink.canGoDown(map) && (pink.getRelativeQuadrant() == 1 || pink.getRelativeQuadrant() == 2))
+			else if(j.canGoUp(map) && j.findAngle(man) == 270)
 			{
-				pink.moveDown();
+				j.moveUp();
 			}
-			else if(pink.canGoLeft(map) && (pink.getRelativeQuadrant() == 2 || pink.getRelativeQuadrant() == 4))
+			else if(j.canGoRight(map) && j.findAngle(man) == 180)
 			{
-				pink.moveLeft();
+				j.moveRight();
 			}
-			else if(pink.canGoRight(map) && (pink.getRelativeQuadrant() == 1 || pink.getRelativeQuadrant() == 3))
+			else if(j.canGoLeft(map) && (j.findAngle(man) == 0 || j.findAngle(man) == 360))
 			{
-				pink.moveRight();
+				j.moveLeft();
+			}
+			if(j.canGoUp(map) && (j.getRelativeQuadrant() == 3 || j.getRelativeQuadrant() == 4))
+			{
+				j.moveUp();
+			}
+			else if(j.canGoDown(map) && (j.getRelativeQuadrant() == 1 || j.getRelativeQuadrant() == 2))
+			{
+				j.moveDown();
+			}
+			else if(j.canGoLeft(map) && (j.getRelativeQuadrant() == 2 || j.getRelativeQuadrant() == 4))
+			{
+				j.moveLeft();
+			}
+			else if(j.canGoRight(map) && (j.getRelativeQuadrant() == 1 || j.getRelativeQuadrant() == 3))
+			{
+				j.moveRight();
 			}
 		}
 		
-		public void updateScaredGhostOrange()
-		{
-			if(orange.canGoDown(map) && orange.findAngle(man) == 90)
-			{
-				orange.moveDown();
-			}
-			else if(orange.canGoUp(map) && orange.findAngle(man) == 270)
-			{
-				orange.moveUp();
-			}
-			else if(orange.canGoRight(map) && orange.findAngle(man) == 180)
-			{
-				orange.moveRight();
-			}
-			else if(orange.canGoLeft(map) && (orange.findAngle(man) == 0 || orange.findAngle(man) == 360))
-			{
-				orange.moveLeft();
-			}
-			if(orange.canGoUp(map) && (orange.getRelativeQuadrant() == 3 || orange.getRelativeQuadrant() == 4))
-			{
-				orange.moveUp();
-			}
-			else if(orange.canGoDown(map) && (orange.getRelativeQuadrant() == 1 || orange.getRelativeQuadrant() == 2))
-			{
-				orange.moveDown();
-			}
-			else if(orange.canGoLeft(map) && (orange.getRelativeQuadrant() == 2 || orange.getRelativeQuadrant() == 4))
-			{
-				orange.moveLeft();
-			}
-			else if(orange.canGoRight(map) && (orange.getRelativeQuadrant() == 1 || orange.getRelativeQuadrant() == 3))
-			{
-				orange.moveRight();
-			}
-		}
-		
-		public void updateScaredGhostBlue()
-		{
-			if(blue.canGoDown(map) && blue.findAngle(man) == 90)
-			{
-				blue.moveDown();
-			}
-			else if(blue.canGoUp(map) && blue.findAngle(man) == 270)
-			{
-				blue.moveUp();
-			}
-			else if(blue.canGoRight(map) && blue.findAngle(man) == 180)
-			{
-				blue.moveRight();
-			}
-			else if(blue.canGoLeft(map) && (blue.findAngle(man) == 0 || blue.findAngle(man) == 360))
-			{
-				blue.moveLeft();
-			}
-			if(blue.canGoUp(map) && (blue.getRelativeQuadrant() == 3 || blue.getRelativeQuadrant() == 4))
-			{
-				blue.moveUp();
-			}
-			else if(blue.canGoDown(map) && (blue.getRelativeQuadrant() == 1 || blue.getRelativeQuadrant() == 2))
-			{
-				blue.moveDown();
-			}
-			else if(blue.canGoLeft(map) && (blue.getRelativeQuadrant() == 2 || blue.getRelativeQuadrant() == 4))
-			{
-				blue.moveLeft();
-			}
-			else if(blue.canGoRight(map) && (blue.getRelativeQuadrant() == 1 || blue.getRelativeQuadrant() == 3))
-			{
-				blue.moveRight();
-			}
-		}
-		
-		public void updateScaredGhostRed()
-		{
-			if(red.canGoDown(map) && red.findAngle(man) == 90)
-			{
-				red.moveDown();
-			}
-			else if(red.canGoUp(map) && red.findAngle(man) == 270)
-			{
-				red.moveUp();
-			}
-			else if(red.canGoRight(map) && red.findAngle(man) == 180)
-			{
-				red.moveRight();
-			}
-			else if(red.canGoLeft(map) && (red.findAngle(man) == 0 || red.findAngle(man) == 360))
-			{
-				red.moveLeft();
-			}
-			if(red.canGoUp(map) && (red.getRelativeQuadrant() == 3 || red.getRelativeQuadrant() == 4))
-			{
-				red.moveUp();
-			}
-			else if(red.canGoDown(map) && (red.getRelativeQuadrant() == 1 || red.getRelativeQuadrant() == 2))
-			{
-				red.moveDown();
-			}
-			else if(red.canGoLeft(map) && (red.getRelativeQuadrant() == 2 || red.getRelativeQuadrant() == 4))
-			{
-				red.moveLeft();
-			}
-			else if(red.canGoRight(map) && (red.getRelativeQuadrant() == 1 || red.getRelativeQuadrant() == 3))
-			{
-				red.moveRight();
-			}
-		}
 		
 		public void updateGhostDirectionPink()
 		{
@@ -907,7 +839,7 @@ public class PacmanBoard extends JFrame implements ActionListener
 			}
 		}
 		
-		public void ghostVisibilityRed()
+		public void ghostHitRed()
 		{
 			if(red.getX() < man.getX() + 10 && red.getX() > man.getX() - 10 && red.getY() < man.getY() + 10 && red.getY() > man.getY() - 10)
 			{
@@ -918,7 +850,7 @@ public class PacmanBoard extends JFrame implements ActionListener
 			}
 		}
 		
-		public void ghostVisibilityPink()
+		public void ghostHitPink()
 		{
 			if(pink.getX() < man.getX() + 10 && pink.getX() > man.getX() - 10 && pink.getY() < man.getY() + 10 && pink.getY() > man.getY() - 10)
 			{
@@ -929,7 +861,7 @@ public class PacmanBoard extends JFrame implements ActionListener
 			}
 		}
 		
-		public void ghostVisibilityBlue()
+		public void ghostHitBlue()
 		{
 			if(blue.getX() < man.getX() + 10 && blue.getX() > man.getX() - 10 && blue.getY() < man.getY() + 10 && blue.getY() > man.getY() - 10)
 			{
@@ -939,7 +871,7 @@ public class PacmanBoard extends JFrame implements ActionListener
 				sound.playSound("eatghost");
 			}
 		}
-		public void ghostVisibilityOrange()
+		public void ghostHitOrange()
 		{
 			if(orange.getX() < man.getX() + 10 && orange.getX() > man.getX() - 10 && orange.getY() < man.getY() + 10 && orange.getY() > man.getY() - 10)
 			{
@@ -950,181 +882,50 @@ public class PacmanBoard extends JFrame implements ActionListener
 			}
 		}
 		
-		public void notMovingRed()
+		public void notMoving(Ghost j)
 		{
-			if(red.getDy() == 0 && red.getDx() == 0)
+			if(j.getDy() == 0 && j.getDx() == 0)
 			{
 				int value = (int) ((Math.random() * 10) + 1);
 				if(value <= 2)
 				{
-					if(red.canGoDown(map))
-					red.moveDown();
-					else if(red.canGoUp(map))
-						red.moveUp();
-					else if(red.canGoRight(map))
-						red.moveRight();
+					if(j.canGoDown(map))
+					j.moveDown();
+					else if(j.canGoUp(map))
+						j.moveUp();
+					else if(j.canGoRight(map))
+						j.moveRight();
 				}
 				else if(2 < value && value <= 4)
 				{
-					if(red.canGoUp(map))
-						red.moveRight();
-					else if(red.canGoLeft(map))
-							red.moveLeft();
-					else if(red.canGoRight(map))
-							red.moveRight();
+					if(j.canGoUp(map))
+						j.moveRight();
+					else if(j.canGoLeft(map))
+							j.moveLeft();
+					else if(j.canGoRight(map))
+							j.moveRight();
 				}
 				else if(4 < value && value <= 8)
 				{
-					if(red.canGoRight(map))
-						red.moveRight();
-					else if(red.canGoUp(map))
-							red.moveUp();
-					else if(red.canGoLeft(map))
-							red.moveLeft();	
+					if(j.canGoRight(map))
+						j.moveRight();
+					else if(j.canGoUp(map))
+							j.moveUp();
+					else if(j.canGoLeft(map))
+							j.moveLeft();	
 				}
 				else if(8 < value && value <= 10)
 				{
-					if(red.canGoLeft(map))
-						red.moveLeft();
-					else if(red.canGoUp(map))
-							red.moveUp();
-					else if(red.canGoRight(map))
-							red.moveRight();	
+					if(j.canGoLeft(map))
+						j.moveLeft();
+					else if(j.canGoUp(map))
+							j.moveUp();
+					else if(j.canGoRight(map))
+							j.moveRight();	
 				}
 			}
 		}
 		
-		public void notMovingOrange()
-		{
-			if(orange.getDy() == 0 && orange.getDx() == 0)
-			{
-				int value = (int) ((Math.random() * 10) + 1);
-				if(value <= 2)
-				{
-					if(orange.canGoDown(map))
-					orange.moveDown();
-					else if(orange.canGoUp(map))
-						orange.moveUp();
-					else if(orange.canGoRight(map))
-						orange.moveRight();
-				}
-				else if(2 < value && value <= 4)
-				{
-					if(orange.canGoUp(map))
-						orange.moveRight();
-					else if(orange.canGoLeft(map))
-							orange.moveLeft();
-					else if(orange.canGoRight(map))
-							orange.moveRight();
-				}
-				else if(4 < value && value <= 8)
-				{
-					if(orange.canGoRight(map))
-						orange.moveRight();
-					else if(orange.canGoUp(map))
-							orange.moveUp();
-					else if(orange.canGoLeft(map))
-							orange.moveLeft();	
-				}
-				else if(8 < value && value <= 10)
-				{
-					if(orange.canGoLeft(map))
-						orange.moveLeft();
-					else if(orange.canGoUp(map))
-							orange.moveUp();
-					else if(orange.canGoRight(map))
-							orange.moveRight();	
-				}
-			}
-		}
-		
-		public void notMovingBlue()
-		{
-			if(blue.getDy() == 0 && blue.getDx() == 0)
-			{
-				int value = (int) ((Math.random() * 10) + 1);
-				if(value <= 2)
-				{
-					if(blue.canGoDown(map))
-					blue.moveDown();
-					else if(blue.canGoUp(map))
-						blue.moveUp();
-					else if(blue.canGoRight(map))
-						blue.moveRight();
-				}
-				else if(2 < value && value <= 4)
-				{
-					if(blue.canGoUp(map))
-						blue.moveRight();
-					else if(blue.canGoLeft(map))
-							blue.moveLeft();
-					else if(blue.canGoRight(map))
-							blue.moveRight();
-				}
-				else if(4 < value && value <= 8)
-				{
-					if(blue.canGoRight(map))
-						blue.moveRight();
-					else if(blue.canGoUp(map))
-							blue.moveUp();
-					else if(blue.canGoLeft(map))
-							blue.moveLeft();	
-				}
-				else if(8 < value && value <= 10)
-				{
-					if(blue.canGoLeft(map))
-						blue.moveLeft();
-					else if(blue.canGoUp(map))
-							blue.moveUp();
-					else if(blue.canGoRight(map))
-							blue.moveRight();	
-				}
-			}
-		}
-		
-		public void notMovingPink()
-		{
-			if(pink.getDy() == 0 && pink.getDx() == 0)
-			{
-				int value = (int) ((Math.random() * 10) + 1);
-				if(value <= 2)
-				{
-					if(pink.canGoDown(map))
-					pink.moveDown();
-					else if(pink.canGoUp(map))
-						pink.moveUp();
-					else if(pink.canGoRight(map))
-						pink.moveRight();
-				}
-				else if(2 < value && value <= 4)
-				{
-					if(pink.canGoUp(map))
-						pink.moveRight();
-					else if(pink.canGoLeft(map))
-							pink.moveLeft();
-					else if(pink.canGoRight(map))
-							pink.moveRight();
-				}
-				else if(4 < value && value <= 8)
-				{
-					if(pink.canGoRight(map))
-						pink.moveRight();
-					else if(pink.canGoUp(map))
-							pink.moveUp();
-					else if(pink.canGoLeft(map))
-							pink.moveLeft();	
-				}
-				else if(8 < value && value <= 10)
-				{
-					if(pink.canGoLeft(map))
-						pink.moveLeft();
-					else if(pink.canGoUp(map))
-							pink.moveUp();
-					else if(pink.canGoRight(map))
-							pink.moveRight();	
-				}
-			}
-		}
 		
 	public static void main (String[] args)
 	{
